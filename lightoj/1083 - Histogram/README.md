@@ -1,8 +1,6 @@
 ## Topic
 
-```
 Segment Tree/Interval Tree, RMQ
-```
 
 ## Key Idea
 
