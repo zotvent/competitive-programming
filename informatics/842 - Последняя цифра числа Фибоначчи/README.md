@@ -4,4 +4,4 @@
 
 ### Problem Source
 
-[informatics](http://informatics.mccme.ru/mod/statements/view.php?id=649#1)
+[informatics](http://informatics.mccme.ru/mod/statements/view3.php?id=649&chapterid=842#1)
