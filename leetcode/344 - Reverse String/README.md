@@ -1,6 +1,6 @@
 ### Topic
 
-    Bit Manipulation
+    Strings
 
 ### Problem Source
 
