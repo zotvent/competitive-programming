@@ -1,6 +1,6 @@
 ### Topic
 
-    Tree
+    Binary Tree
 
 ### Problem Source
 

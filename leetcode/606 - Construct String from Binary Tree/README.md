@@ -1,6 +1,6 @@
 ### Topic
 
-    Tree, Strings
+    Binary Tree, Strings
 
 ### Problem Source
 
