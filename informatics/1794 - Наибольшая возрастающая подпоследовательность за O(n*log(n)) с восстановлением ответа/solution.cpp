@@ -27,8 +27,8 @@ const int shift = 4;
 
 using namespace std;
 
-int n, k, b, m, a[N];
-vector<int> dp(N);
+int n, k, b, m, a[N], p[N];
+vector<int> dp(N), pos(N);
 
 void input() {
     cin >> n >> a[1] >> k >> b >> m;
@@ -42,17 +42,29 @@ void solve() {
         dp[i] = inf;
     for (int i = 1; i <= n; i++) {
         int j = int (upper_bound(dp.begin(), dp.end(), a[i]) - dp.begin());
-        if (dp[j-1] < a[i] && a[i] < dp[j])
+        if (dp[j-1] < a[i] && a[i] < dp[j]) {
             dp[j] = a[i];
+            p[i] = pos[j-1];
+            pos[j] = i;
+        }
     }
 }
 
 void output() {
+    int last = 1;
     for (int i = n; i > 0; i--)
         if (dp[i] != inf) {
-            cout << i;
+            last = pos[i];
             break;
         }
+
+    vector<int> path;
+    path.pb(a[last]);
+    for (int i = p[last]; i != 0; i = p[i])
+        path.pb(a[i]);
+
+    for (int i = path.size()-1; i >= 0; i--)
+        cout << path[i] << ' ';
 }
 
 int main() {
