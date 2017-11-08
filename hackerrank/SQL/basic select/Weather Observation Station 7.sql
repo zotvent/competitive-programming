@@ -1,0 +1,1 @@
+select distinct city from station where lower(city) regexp "[aeiou]$";
