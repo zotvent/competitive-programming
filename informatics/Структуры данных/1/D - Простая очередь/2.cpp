@@ -73,22 +73,15 @@ public:
     }
     
     void pop() {
-        if (head) {
-            cout << head->val << endl;
-            Node<T>* temp = head->next;
-            delete head;
-            head = temp;
-            _size--;
-        }
-        else
-            cout << "error" << endl;
+        cout << head->val << endl;
+        Node<T>* temp = head->next;
+        delete head;
+        head = temp;
+        _size--;
     }
     
     void front() {
-        if (head)
-            cout << head->val << endl;
-        else
-            cout << "error" << endl;
+        cout << head->val << endl;
     }
     
     void size() {
