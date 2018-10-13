@@ -1,36 +1,26 @@
 class Solution {
 public:
     int calPoints(vector<string>& ops) {
-        vector<int> v;
-        int sum = 0;
-        for (int i = 0; i < ops.size(); i++) 
-            if (ops[i] == "C") {
-                if (v.size() > 0) {
-                    sum -= v[v.size()-1];
-                    v.pop_back();  
-                }
-            }
-            else if (ops[i] == "D") {
-                if (v.size() > 0) {
-                    int temp = v[v.size()-1]*2;
-                    v.push_back(temp);
-                    sum += temp;   
-                }
-            }
+        int res = 0;
+        vector<int> scores;
+        
+        for (int i = 0; i < ops.size(); i++) {
+            if (ops[i] == "D")
+                scores.push_back(scores.back() * 2);
+            else if (ops[i] == "C")
+                scores.pop_back();
             else if (ops[i] == "+") {
-                int temp = 0;
-                if (v.size() > 0)
-                    temp += v[v.size()-1];
-                if (v.size() > 1)
-                    temp += v[v.size()-2];
-                v.push_back(temp);
-                sum += temp;
+                int last = scores.back();
+                int pre = scores[scores.size() - 2];
+                scores.push_back(pre + last);
             }
-            else {
-                int temp = stoi(ops[i]);
-                v.push_back(temp);
-                sum += temp;
-            }
-        return sum;
+            else
+                scores.push_back(stoi(ops[i]));
+        }
+        
+        for (int i = 0; i < scores.size(); i++)
+            res += scores[i];
+        
+        return res;
     }
 };
