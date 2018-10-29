@@ -9,7 +9,7 @@
  */
 class Solution {
 public:
-    int getMinimumDifference(TreeNode* root) {
+    int minDiffInBST(TreeNode* root) {
         int res = INT_MAX, prev = -1;
         dfs(root, res, prev);
         return res;
@@ -22,7 +22,7 @@ public:
             if (prev != -1)
                 res = min(res, root->val - prev);
             prev = root->val;
-            
+
             dfs(root->right, res, prev);
         }
     }
