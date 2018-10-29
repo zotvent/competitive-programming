@@ -34,7 +34,7 @@ const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
-    int n = 0;
+    int n;
     
     void print() {
     }
@@ -55,6 +55,10 @@ class Solution {
     }
     
 public:
+
+    Solution() {
+    }
+
     void solve() {
         input();
         solution();
