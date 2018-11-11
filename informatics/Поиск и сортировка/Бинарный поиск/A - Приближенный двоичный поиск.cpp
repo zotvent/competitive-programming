@@ -27,60 +27,66 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
+const ll inf = 1e9;
 const int N = 1e5+5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
-    int n, k, a[N], b[N], i;
+    int n, k;
+    int a[N], b[N];
     
     void print() {
     }
     
     void input() {
         speed
-//        freopen("input.txt", "r", stdin);
-//        freopen("output.txt", "w", stdout);
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
         cin >> n >> k;
-        for (i = 1; i <= n; i++)
-            cin >> a[i];
-        for (i = 1; i <= k; i++)
-            cin >> b[i];
+        for (int i = 1; i <= n; i++) cin >> a[i];
+        for (int i = 1; i <= k; i++) cin >> b[i];
     }
     
     void output() {
     }
     
     void solution() {
-        for (i = 1; i <= k; i++)
-            binary_search(b[i]);
-    }
-    
-    void binary_search(int num) {
-        int l = 1, r = n;
-        int dif = abs(num - a[1]), res = a[1];
-        while(l <= r) {
-            int m = (l + r) / 2;
-            int cur_dif = abs(a[m] - num);
-            
-            if (cur_dif < dif) {
-                dif = cur_dif;
-                res = a[m];
-            }
-            else if (cur_dif == dif)
-                res = min(res, a[m]);
-            
-            if (a[m] < num)
-                l = m + 1;
-            else
-                r = m - 1;
-        }
-        cout << res << endl;
+        for (int i = 1; i <= k; i++)
+            cout << binary_search(b[i]) << endl;
     }
 
+    int binary_search(int x) {
+        int l = 1, r = n;
+        int res;
+        ll dif = 4 * inf + 5;
+
+        while (l <= r && res != x) {
+            int m = (l + r) / 2;
+            
+            if (x < a[m]) 
+                r = m - 1;
+            else if (x > a[m]) 
+                l = m + 1;
+
+            ll temp = abs(x - a[m]);
+            if (temp < dif) {
+                dif = temp;
+                res = a[m];
+            }
+            else if (temp == dif) 
+                res = min(res, a[m]);
+        }
+
+        return res;
+    }
+    
 public:
+
+    Solution() {
+    }
+
     void solve() {
         input();
         solution();
