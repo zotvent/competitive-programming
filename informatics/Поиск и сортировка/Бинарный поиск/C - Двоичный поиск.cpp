@@ -34,48 +34,50 @@ const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
-    int n, k, a[N], b[N], i;
+    int n, k, a[N], b[N];
     
     void print() {
     }
     
     void input() {
         speed
-        //        freopen("input.txt", "r", stdin);
-        //        freopen("output.txt", "w", stdout);
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
         cin >> n >> k;
-        for (i = 1; i <= n; i++)
-            cin >> a[i];
-        for (i = 1; i <= k; i++)
-            cin >> b[i];
+        for (int i = 1; i <= n; i++) cin >> a[i];
+        for (int i = 1; i <= k; i++) cin >> b[i];
     }
     
     void output() {
-        
     }
     
     void solution() {
-        for (i = 1; i <= k; i++)
-            find(b[i]);
-    }
-    
-    void find(int num) {
-        int l = 1, r = n;
-        while (l <= r) {
-            int m = (l + r) / 2;
-            if (a[m] == num) {
-                cout << "YES\n";
-                return;
-            }
-            else if (a[m] < num)
-                l = m + 1;
-            else
-                r = m - 1;
+        for (int i = 1; i <= k; i++) {
+            bool found = binary_search(b[i]);
+            cout << (found ? "YES" : "NO") << endl;
         }
-        cout << "NO\n";
+    }
+
+    bool binary_search(int x) {
+        bool found = false;
+        int l = 1, r = n;
+
+        while (l <= r && !found) {
+            int m = (l + r) / 2;
+
+            if (a[m] == x) found = true;
+            else if (a[m] < x) l = m + 1;
+            else r = m - 1;
+        }
+
+        return found;
     }
     
 public:
+
+    Solution() {
+    }
+
     void solve() {
         input();
         solution();
