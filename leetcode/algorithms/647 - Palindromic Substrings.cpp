@@ -1,29 +1,27 @@
 class Solution {
 public:
     int countSubstrings(string s) {
-        int n = s.length();
-        vector<vector<int>> g(n, vector<int>(n, 0));
+        int res = 0;
         
-        for (int i = 0; i < n; i++) {
-            g[i][i] = 1;
-            int l = i-1;
-            int r = i+1;
-            // odd palindromes
-            while (l >= 0 && r < n && s[l] == s[r]) {
-                g[l--][r++] = 1;
-            }
-            // even palindromes
-            l = i-1;
-            r = i;
-            while (l >= 0 && r < n && s[l] == s[r]) {
-                g[l--][r++] = 1;
-            }
+        for (int i = 0; i < s.size(); i++) {
+            int odd = count(s, i, i);
+            int even = count(s, i, i + 1);
+            res += odd + even;
         }
         
-        int res = 0;
-        for (int i = 0; i < n; i++)
-            for (int j = i; j < n; j++)
-                res += g[i][j];
         return res;
     }
+
+    int count(string &s, int left, int right) {
+        int res = 0;
+
+        while (left >= 0 && right < s.size() && s[left] == s[right]) {
+            res++;
+            left--;
+            right++;
+        }
+        
+        return res;
+    }
+
 };
