@@ -2,7 +2,7 @@
 
 This is my personal repository of solutions that I wrote through the time.
 
-I hope that my codes will help you to solve some problems.
+I hope that my repository will help you to solve some problems.
 
 ## Sources of problems
 * [acmp.ru](https://acmp.ru/)
