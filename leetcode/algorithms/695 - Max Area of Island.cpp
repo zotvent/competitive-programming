@@ -1,38 +1,51 @@
 class Solution {
 public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        int cnt = 2;
+        vector<vector<int>> used(grid.size(), vector<int>(grid[0].size(), 0));
+        int res = 0;
+        
         for (int i = 0; i < grid.size(); i++)
             for (int j = 0; j < grid[i].size(); j++)
-                if (grid[i][j] == 1) {
-                    dfs(grid, cnt, i, j);
-                    cnt++;
+                if (!used[i][j] && grid[i][j]) {
+                    int temp = bfs(i, j, grid, used);
+                    res = max(res, temp);
                 }
-        int area = 0;
-        map<int, int> m;
-        for (int i = 0; i < grid.size(); i++)
-            for (int j = 0; j < grid[i].size(); j++)
-                if (grid[i][j] != 0)
-                    m[grid[i][j]]++;
-        for (auto it = m.begin(); it != m.end(); it++)
-            area = max(area, it->second);
-        return area;
+        
+        return res;
     }
     
-    void dfs(vector<vector<int>>& grid, int color, int row, int column) {
-        grid[row][column] = color;
-        int dx[] = {1, -1, 0, 0};
-        int dy[] = {0, 0, 1, -1};
-        for (int i = 0; i < 4; i++) {
-            int x = row+dx[i];
-            int y = column+dy[i];
-            if (valid(x, y, grid)) 
-                if (grid[x][y] == 1)
-                    dfs(grid, color, x, y);
+    int bfs(int row, int col, vector<vector<int>>& grid, vector<vector<int>>& used) {
+        int res = 1;
+        
+        queue<pair<int, int>> q;
+        q.push(make_pair(row, col));
+        used[row][col] = 1;
+        
+        vector<int> dx = {0, 0, 1, -1};
+        vector<int> dy = {1, -1, 0, 0};
+        
+        while (!q.empty()) {
+            pair<int, int> v = q.front();
+            q.pop();
+            
+            for (int i = 0; i < 4; i++) {
+                int x = v.first + dx[i];
+                int y = v.second + dy[i];
+                
+                if (valid(x, y, grid)) {
+                    if (grid[x][y] && !used[x][y]) {
+                        res++;
+                        used[x][y] = 1;
+                        q.push(make_pair(x, y));
+                    }
+                }
+            }
         }
+        
+        return res;
     }
     
-    bool valid(int row, int column, vector<vector<int>>& grid) {
-        return row >= 0 && row < grid.size() && column >= 0 && column < grid[0].size();
+    bool valid(int x, int y, vector<vector<int>>& grid) {
+        return x >= 0 && y >= 0 && x < grid.size() && y < grid[0].size();
     }
 };
