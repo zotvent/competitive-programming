@@ -27,43 +27,47 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
-const int N = 1e2+5;
+const int inf = 1e9 + 5;
+const int N = 1e5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
 template<typename T>
 struct Node {
+
     T val;
-    Node* next;
-    Node* prev;
-    
+    Node *prev;
+    Node *next;
+
     Node(T x) {
         val = x;
-        next = NULL;
         prev = NULL;
+        next = NULL;
     }
 };
 
 template<typename T>
-struct Dequeue {
+struct Deque {
+
 private:
-    Node<T>* head;
-    Node<T>* tail;
+
     int _size;
-    
+    Node<T> *head;
+    Node<T> *tail;
+
 public:
-    Dequeue() {
+
+    Deque() {
         _size = 0;
         head = NULL;
         tail = NULL;
     }
-    
+
     void push_front(T x) {
         Node<T> *node = new Node<T>(x);
 
-        if (isEmpty()) {
+        if (size() == 0) {
             head = node;
             tail = node;
         }
@@ -74,13 +78,12 @@ public:
         }
 
         _size++;
-        cout << "ok" << endl;
     }
 
     void push_back(T x) {
         Node<T> *node = new Node<T>(x);
 
-        if (isEmpty()) {
+        if (size() == 0) {
             head = node;
             tail = node;
         }
@@ -91,79 +94,81 @@ public:
         }
 
         _size++;
-        cout << "ok" << endl;
     }
-    
-    void pop_front() {
-        if (isEmpty()) cout << "error\n";
-        else {
-            T res = head->val;
-            Node<T> *next = head->next;
-            if (next) next->prev = NULL;
-            head = NULL;
-            head = next;
 
-            _size--;
-            cout << res << endl;
+    T pop_front() {
+        T res = front();
+
+        Node<T> *next = head->next;
+        if (next) {
+            next->prev = NULL;
         }
+        head->next = NULL;
+        free(head);
+        head = next;
+
+        _size--;
+
+        return res;
     }
 
-    void pop_back() {
-        if (isEmpty()) cout << "error\n";
-        else {
-            T res = tail->val;
-            Node<T> *prev = tail->prev;
-            if (prev) prev->next = NULL;
-            tail = NULL;
-            tail = prev;
-
-            _size--;
-            cout << res << endl;
+    T pop_back() {
+        T res = back();
+        
+        Node<T> *prev = tail->prev;
+        if (prev) {
+            prev->next = NULL;
         }
-    }
-    
-    void front() {
-        if (isEmpty()) cout << "error\n";
-        else cout << head->val << endl;
+        tail->prev = NULL;
+        free(tail);
+        tail = prev;
+
+        _size--;
+
+        return res;
     }
 
-    void back() {
-        if (isEmpty()) cout << "error\n";
-        else cout << tail->val << endl;
+    T front() {
+        if (size() == 0) {
+            throw 1;
+        }
+
+        return head->val;
     }
-    
-    void size() {
-        cout << _size << endl;
+
+    T back() {
+        if (size() == 0) {
+            throw 1;
+        }
+
+        return tail->val;
     }
-    
+
+    int size() {
+        return _size;
+    }
+
     void clear() {
+        _size = 0;
+
         while (head) {
             Node<T> *next = head->next;
-            if (next) next->prev = NULL;
-            head = NULL;
+            if (next) {
+                next->prev = NULL;
+            }
+            head->next = NULL;
+            free(head);
             head = next;
         }
-        while (tail) {
-            Node<T> *prev = tail->prev;
-            if (prev) prev->next = NULL;
-            tail = NULL;
-            tail = prev;
-        }
-
-        _size = 0;
-        cout << "ok" << endl;
     }
 
-    bool isEmpty() {
-        return _size == 0;
-    }
-    
 };
 
 class Solution {
-    Dequeue<int> deq;
-    string command;
-    int n;
+
+    string cmd;
+    int x;
+    Deque<int> Deque;
     
     void print() {
     }
@@ -174,35 +179,78 @@ class Solution {
         freopen("output.txt", "w", stdout);
     }
     
+    void prepare() {
+    }
+    
     void output() {
     }
     
     void solution() {
-        while (cin >> command) {
-            if (command == "push_front") {
-                cin >> n;
-                deq.push_front(n);
+        while (true) {
+            cin >> cmd;
+            if (cmd == "push_front") {
+                cin >> x;
+                Deque.push_front(x);
+                cout << "ok\n";
             }
-            else if (command == "push_back") {
-                cin >> n;
-                deq.push_back(n);
+            else if (cmd == "push_back") {
+                cin >> x;
+                Deque.push_back(x);
+                cout << "ok\n";
             }
-            else if (command == "pop_front") deq.pop_front();
-            else if (command == "pop_back") deq.pop_back();
-            else if (command == "front") deq.front();
-            else if (command == "back") deq.back();
-            else if (command == "size") deq.size();
-            else if (command == "clear") deq.clear();
-            else if (command == "exit") {
-                cout << "bye" << endl;
+            else if (cmd == "pop_front") {
+                try {
+                    int front = Deque.pop_front();
+                    cout << front << endl;
+                }
+                catch (int exception) {
+                    cout << "error\n";
+                }
+            }
+            else if (cmd == "pop_back") {
+                try {
+                    int back = Deque.pop_back();
+                    cout << back << endl;
+                }
+                catch (int exception) {
+                    cout << "error\n";
+                }
+            }
+            else if (cmd == "front") {
+                try {
+                    int front = Deque.front();
+                    cout << front << endl;
+                }
+                catch (int exception) {
+                    cout << "error\n";
+                }
+            }
+            else if (cmd == "back") {
+                try {
+                    int back = Deque.back();
+                    cout << back << endl;
+                }
+                catch (int exception) {
+                    cout << "error\n";
+                }
+            }
+            else if (cmd == "size") {
+                cout << Deque.size() << endl;
+            }
+            else if (cmd == "clear") {
+                Deque.clear();
+                cout << "ok\n";
+            }
+            else {
+                cout << "bye";
                 break;
             }
         }
     }
-    
+
 public:
+    
     Solution() {
-        deq = Dequeue<int>();
     }
     
     void solve() {
