@@ -1,6 +1,6 @@
 template<typename T>
 struct Node {
-    
+
     T val;
     Node *next;
 
@@ -12,8 +12,8 @@ struct Node {
 };
 
 template<typename T>
-struct Queue {
-    
+struct LinkedList {
+
 private:
 
     int _size;
@@ -21,17 +21,17 @@ private:
     Node<T> *tail;
 
 public:
-
-    Queue() {
+    
+    LinkedList() {
+        _size = 0;
         head = NULL;
         tail = NULL;
-        _size = 0;
     }
 
-    void push(T x) {
+    void push_back(T x) {
         Node<T> *node = new Node<T>(x);
-        
-        if (size() == 0) {
+
+        if (isEmpty()) {
             head = node;
             tail = node;
         }
@@ -43,20 +43,20 @@ public:
         _size++;
     }
 
-    T pop() {
+    T pop_front() {
         T res = front();
 
         Node<T> *next = head->next;
         free(head);
         head = next;
-        
+
         _size--;
 
         return res;
     }
 
     T front() {
-        if (size() == 0) {
+        if (isEmpty()) {
             throw 1;
         }
 
@@ -67,14 +67,8 @@ public:
         return _size;
     }
 
-    void clear() {
-        _size = 0;
-
-        while (head) {
-            Node<T> *next = head->next;
-            free(head);
-            head = next;
-        }
+    bool isEmpty() {
+        return _size == 0;
     }
 
 };

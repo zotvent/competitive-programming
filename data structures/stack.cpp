@@ -1,19 +1,22 @@
+template<typename T>
 struct Node {
     
-    int val;
+    T val;
     Node *prev;
 
-    Node(int x) {
+    Node(T x) {
         val = x;
         prev = NULL;
     }
+
 };
 
+template<typename T>
 struct Stack {
 
 private:
 
-    Node *top;
+    Node<T> *top;
     int _size;
 
 public:
@@ -24,36 +27,36 @@ public:
     }
 
     void push(int x) {
-        if (top) {
-            Node *node = new Node(x);
-            node->prev = top;
+        Node<T> *node = new Node<T>(x);
+
+        if (size() == 0) {
             top = node;
         }
         else {
-            top = new Node(x);
+            node->prev = top;
+            top = node;
         }
+
         _size++;
     }
 
-    int pop() {
-        if (_size == 0) {
-            throw 1;
-        }
+    T pop() {
+        T res = back();
 
-        int res = top->val;
-
-        _size--;
-        Node *prev = top->prev;
+        Node<T> *prev = top->prev;
         free(top);
         top = prev;
+
+        _size--;
 
         return res;
     }
 
-    int back() {
-        if (_size == 0) {
+    T back() {
+        if (size() == 0) {
             throw 1;
         }
+
         return top->val;
     }
 
@@ -63,8 +66,9 @@ public:
 
     void clear() {
         _size = 0;
+
         while (top) {
-            Node *prev = top->prev;
+            Node<T> *prev = top->prev;
             free(top);
             top = prev;
         }
