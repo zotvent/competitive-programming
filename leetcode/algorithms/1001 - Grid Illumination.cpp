@@ -9,7 +9,6 @@ public:
             int y = queries[i][1];
             int found = 0;
 
-            // search
             for (int j = 0; j < lamps.size(); j++) {
                 int lx = lamps[j][0];
                 int ly = lamps[j][1];
@@ -23,7 +22,6 @@ public:
                 }
             }
 
-            // answer
             res.push_back(found);
         }
 
