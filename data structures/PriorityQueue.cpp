@@ -56,10 +56,6 @@ public:
         return index;
     }
 
-    void add(int x) {
-        val[_size++] = x;
-    }
-
     void print() {
         for (int i = 0; i < _size; i++) {
             cout << val[i] << ' ';
@@ -101,18 +97,63 @@ public:
         return old;
     }
 
-    void build_down() {
-        for (int i = _size / 2 - 1; i >= 0; i--) {
-            sift_down(i);
-        }
-    }
-
     bool empty() {
         return _size == 0;
     }
 
     int size() {
         return _size;
+    }
+
+};
+
+template <typename T>
+struct PriorityQueue {
+
+private:
+
+    Heap<T> heap;
+    int capacity;
+
+public:
+
+    PriorityQueue() {
+        capacity = 0;
+    }
+
+    PriorityQueue(int capacity) {
+        this->capacity = capacity;
+    }
+
+    pii dequeue() {
+        if (heap.empty()) {
+            return mp(-1, -1);
+        }
+
+        int max = heap.get_max();
+        int index = heap.extract_max();
+
+        if (heap.empty()) {
+            index = -2;
+        }
+
+        return mp(index, max);
+    }
+
+    int enqueue(int x) {
+        return (heap.size() == capacity ? -1 : heap.insert(x));
+    }
+
+    int remove(int pos) {
+        if (pos < 0 || heap.empty() || pos >= heap.size()) {
+            return -1;
+        }
+
+        return heap.remove(pos);
+    }
+
+    void print() {
+        heap.print();
     }
 
 };
