@@ -13,7 +13,7 @@ private:
             swap(val[p], val[pos]);
             return sift_up(p);
         }
-        
+
         return pos;
     }
 
@@ -64,6 +64,7 @@ public:
         for (int i = 0; i < _size; i++) {
             cout << val[i] << ' ';
         }
+        cout << endl;
     }
 
     int increase_priority(int index, int x) {
@@ -113,6 +114,16 @@ public:
 
     int size() {
         return _size;
+    }
+
+    void sort() {
+      int initial_size = _size;
+      for (int i = initial_size - 1; i > 0; i--) {
+        swap(val[0], val[i]);
+        _size--;
+        sift_down(0);
+      }
+      _size = initial_size;
     }
 
 };
