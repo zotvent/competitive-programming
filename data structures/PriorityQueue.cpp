@@ -1,3 +1,4 @@
+// implementation of the max heap
 template <typename T>
 struct Heap {
 
@@ -107,6 +108,7 @@ public:
 
 };
 
+// implementation of the max priority queue since
 template <typename T>
 struct PriorityQueue {
 
