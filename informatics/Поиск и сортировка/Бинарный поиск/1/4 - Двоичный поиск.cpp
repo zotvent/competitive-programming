@@ -27,52 +27,70 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
-const int N = 1e5+5;
+const int inf = 1e9 + 5;
+const int N = 1e5 + 5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
+
     int n, k, a[N], b[N];
-    
+
     void print() {
     }
-    
+
     void input() {
         speed
         freopen("input.txt", "r", stdin);
         freopen("output.txt", "w", stdout);
         cin >> n >> k;
-        for (int i = 1; i <= n; i++) cin >> a[i];
-        for (int i = 1; i <= k; i++) cin >> b[i];
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+        }
+        for (int i = 0; i < k; i++) {
+            cin >> b[i];
+        }
     }
-    
+
+    void prepare() {
+    }
+
     void output() {
     }
-    
+
     void solution() {
-        for (int i = 1; i <= k; i++) {
-            bool found = binary_search(b[i]);
-            cout << (found ? "YES" : "NO") << endl;
+        for (int i = 0; i < k; i++) {
+            if (binary_search(b[i])) {
+                cout << "YES\n";
+            }
+            else {
+                cout << "NO\n";
+            }
         }
     }
 
     bool binary_search(int x) {
-        bool found = false;
-        int l = 1, r = n;
+        int l = 0;
+        int r = n - 1;
 
-        while (l <= r && !found) {
+        while (l <= r) {
             int m = (l + r) / 2;
 
-            if (a[m] == x) found = true;
-            else if (a[m] < x) l = m + 1;
-            else r = m - 1;
+            if (a[m] == x) {
+                return true;
+            }
+            else if (a[m] < x) {
+                l = m + 1;
+            }
+            else {
+                r = m - 1;
+            }
         }
 
-        return found;
+        return false;
     }
-    
+
 public:
 
     Solution() {
@@ -83,6 +101,7 @@ public:
         solution();
         output();
     }
+
 };
 
 int main() {

@@ -27,85 +27,92 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
-const int N = 1e5+5;
+const int inf = 1e9 + 5;
+const int N = 2 * 1e4 + 5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
-    int n, m, a[N], b[N], i;
-    
+
+    int n, k, a[N], b[N];
+
     void print() {
     }
-    
+
     void input() {
         speed
-        //        freopen("input.txt", "r", stdin);
-        //        freopen("output.txt", "w", stdout);
-        cin >> n >> m;
-        for (i = 1; i <= n; i++)
+        freopen("input.txt", "r", stdin);
+        freopen("output.txt", "w", stdout);
+        cin >> n >> k;
+        for (int i = 0; i < n; i++) {
             cin >> a[i];
-        for (i = 1; i <= m; i++)
+        }
+        for (int i = 0; i < k; i++) {
             cin >> b[i];
+        }
     }
-    
+
+    void prepare() {
+    }
+
     void output() {
-        
     }
-    
+
     void solution() {
-        for (i = 1; i <= m; i++) {
-            int first = find_first(b[i]);
-            if (first) {
-                int last = find_last(b[i]);
-                cout << first << ' ' << last << endl;
-            }
-            else
+        for (int i = 0; i < k; i++) {
+            int l = binary_search(b[i], true);
+            int r = binary_search(b[i], false);
+
+            if (l == -1) {
                 cout << "0\n";
+            }
+            else {
+                cout << l + 1 << ' ' << r + 1 << endl;
+            }
         }
     }
-    
-    int find_last(int num) {
-        int l = 1, r = n;
-        int res = 0;
+
+    int binary_search(int x, bool leftMost) {
+        int res = -1;
+        int l = 0;
+        int r = n - 1;
+
         while (l <= r) {
             int m = (l + r) / 2;
-            if (a[m] == num) {
-                l = m + 1;
+
+            if (a[m] == x) {
                 res = m;
+
+                if (leftMost) {
+                    r = m - 1;
+                }
+                else {
+                    l = m + 1;
+                }
             }
-            else if (a[m] > num)
-                r = m - 1;
-            else
+            else if (a[m] < x) {
                 l = m + 1;
+            }
+            else {
+                r = m - 1;
+            }
         }
+
         return res;
     }
-    
-    int find_first(int num) {
-        int l = 1, r = n;
-        int res = 0;
-        while (l <= r) {
-            int m = (l + r) / 2;
-            if (a[m] == num) {
-                r = m - 1;
-                res = m;
-            }
-            else if (a[m] > num)
-                r = m - 1;
-            else
-                l = m + 1;
-        }
-        return res;
-    }
-    
+
 public:
+
+    Solution() {
+    }
+
     void solve() {
         input();
         solution();
         output();
     }
+
 };
 
 int main() {
