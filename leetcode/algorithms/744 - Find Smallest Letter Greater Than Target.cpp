@@ -1,15 +1,28 @@
 class Solution {
 public:
     char nextGreatestLetter(vector<char>& letters, char target) {
-        char const k = 'z'+1;
-        char bigger = k;
-        char less = k;
-        for (auto c: letters) {
-            if (c > target && c < bigger)
-                bigger = c;
-            if (c < target && c < less)
-                less = c;
+        if (target >= letters[letters.size() - 1]) {
+            return letters[0];
         }
-        return (bigger != k ? bigger : less);
+        
+        char res = 'z';
+        
+        int l = 0;
+        int r = letters.size() - 1;
+        
+        while (l <= r) {
+            int m = (l + r) / 2;
+            char c = letters[m];
+            
+            if (c <= target) {
+                l = m + 1;
+            }
+            else {
+                res = min(res, c);
+                r = m - 1;
+            }
+        }
+        
+        return res;
     }
 };
