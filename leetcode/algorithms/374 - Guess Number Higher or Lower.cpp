@@ -6,17 +6,27 @@ int guess(int num);
 class Solution {
 public:
     int guessNumber(int n) {
+        int res;
+        
         int l = 1;
         int r = n;
-        int mid = (r-l)/2 + l;
         
-        int res = guess(mid);
-        while (res != 0) {
-            if (res == 1) l = mid + 1;
-            else r = mid - 1;
-            mid = (r-l)/2 + l;
-            res = guess(mid);
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            int g = guess(m);
+            
+            if (g == 0) {
+                res = m;
+                break;
+            }
+            else if (g == 1) {
+                l = m + 1;
+            }
+            else {
+                r = m - 1;
+            }
         }
-        return mid;
+        
+        return res;
     }
 };
