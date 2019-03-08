@@ -1,74 +1,86 @@
 struct Node {
+    
     int val;
-    Node *next;
+    Node* next;
     
     Node(int x) {
         val = x;
-        next = NULL;
     }
+    
 };
 
 class MyCircularQueue {
-private:
+    
     int capacity;
-    int size;
-    Node *head;
-    Node *tail;
+    int _size;
+    Node* head;
+    Node* tail;
     
 public:
     /** Initialize your data structure here. Set the size of the queue to be k. */
     MyCircularQueue(int k) {
         capacity = k;
-        size = 0;
+        _size = 0;
+        head = NULL;
+        tail = NULL;
     }
     
     /** Insert an element into the circular queue. Return true if the operation is successful. */
     bool enQueue(int value) {
-        if (isFull()) return false;
-        else if (isEmpty()) {
-            Node *node = new Node(value);
+        if (isFull()) {
+            return false;
+        }
+        
+        Node* node = new Node(value);
+        
+        if (isEmpty()) {
             head = node;
             tail = node;
         }
         else {
-            Node *node = new Node(value);
             tail->next = node;
             tail = node;
         }
         
-        size++;
+        _size++;
+        
         return true;
     }
     
     /** Delete an element from the circular queue. Return true if the operation is successful. */
     bool deQueue() {
-        if (isEmpty()) return false;
-        Node *next = head->next;
-        free(head);
+        if (isEmpty()) {
+            return false;
+        }
+        
+        Node* next = head->next;
+        head->next = NULL;
+        head = NULL;
         head = next;
-        size--;
+        
+        _size--;
         
         return true;
     }
     
     /** Get the front item from the queue. */
     int Front() {
-        return isEmpty() ? -1 : head->val;
+        return (isEmpty() ? -1 : head->val);
     }
     
     /** Get the last item from the queue. */
     int Rear() {
-        return isEmpty() ? -1 : tail->val;
+        return (isEmpty() ? -1 : tail->val);
     }
     
     /** Checks whether the circular queue is empty or not. */
     bool isEmpty() {
-        return size == 0;
+        return _size == 0;
     }
     
     /** Checks whether the circular queue is full or not. */
     bool isFull() {
-        return capacity == size;
+        return capacity == _size;
     }
 };
 

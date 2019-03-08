@@ -1,25 +1,24 @@
 class Solution {
 public:
     int numUniqueEmails(vector<string>& emails) {
-        set<string> s;
+        unordered_set<string> s;
         
-        for (auto email: emails) {
-            string temp = "";
+        for (int i = 0; i < emails.size(); i++) {
+            string tmp;
             bool foundPlus = false;
             bool foundAt = false;
             
-            for (int i = 0; i <= email.size(); i++) {
-                if (email[i] == '+')
-                    foundPlus = true;
-                else if (email[i] == '@') {
-                    foundAt = true;
-                    foundPlus = false;
-                }
+            for (int j = 0; j < emails[i].size(); j++) {
+                char c = emails[i][j];
                 
-                if ((!foundAt && email[i] != '.' && !foundPlus) || foundAt)
-                    temp += email[i];
+                if (c == '@') foundAt = true;
+                else if (c == '+') foundPlus = true;
+                
+                if (foundAt) tmp += c;
+                else if (!foundPlus && c != '.') tmp += c;
             }
-            s.insert(temp);
+                
+            s.insert(tmp);
         }
         
         return s.size();

@@ -1,21 +1,19 @@
 class Solution {
 public:
     int firstUniqChar(string s) {
-        pair<int, int> p[26];
-        for (int i = 0; i < 26; i++) p[i] = make_pair(0, 0);
+        int res = -1;
+        vector<int> cnt(26, 0);
         
-        for (int i = 0; i < s.length(); i++) {
-            int j = (int) (s[i]-'a');
-            p[j].first++;
-            p[j].second = i;
+        for (int i = 0; i < s.size(); i++) {
+            cnt[s[i] - 'a']++;
+        }
+        for (int i = 0; i < s.size(); i++) {
+            if (cnt[s[i] - 'a'] == 1) {
+                res = i;
+                break;
+            }
         }
         
-        int ans = -1, pos = (int) 1e9;
-        for (int i = 0; i < 26; i++)
-            if (p[i].first == 1 && p[i].second < pos) {
-                pos = p[i].second;
-                ans = pos;
-            }
-        return ans;
+        return res;
     }
 };
