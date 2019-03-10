@@ -27,74 +27,88 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
-const int N = 1e5+5;
+const int inf = 1e9 + 5;
+const int N = 1e4 + 5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
+template <typename T>
 struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
 
-    TreeNode(int x) {
+    T val;
+    TreeNode<T>* left;
+    TreeNode<T>* right;
+
+    TreeNode(T x) {
         val = x;
         left = NULL;
         right = NULL;
     }
+
 };
 
-TreeNode* add(TreeNode* root, int x) {
-    if (!root)
-        return new TreeNode(x);
-
-    if (x < root->val)
-        root->left = add(root->left, x);
-    else if (root->val < x)
-        root->right = add(root->right, x);
-
-    return root;
-}
-
 class Solution {
-    int x, size;
-    TreeNode* root;
-    
+
+    int x, res;
+    TreeNode<int>* root;
+
     void print() {
     }
-    
+
     void input() {
         speed
         freopen("input.txt", "r", stdin);
         freopen("output.txt", "w", stdout);
-        while(cin >> x) {
-            if (x == 0) break;
-            root = add(root, x);
+        while (cin >> x) {
+            if (x == 0) {
+                break;
+            }
+
+            root = insert(root, x);
         }
-    }
-    
-    void output() {
-        cout << size;
-    }
-    
-    void solution() {
-        dfs(root);
     }
 
-    void dfs(TreeNode* root) {
+    TreeNode<int>* insert(TreeNode<int>* root, int x) {
         if (root) {
-            size++;
-            dfs(root->left);
-            dfs(root->right);
+            if (x > root->val) {
+                root->right = insert(root->right, x);
+            }
+            else if (x < root->val) {
+                root->left = insert(root->left, x);
+            }
+        }
+        else {
+            root = new TreeNode<int>(x);
+        }
+
+        return root;
+    }
+
+    void prepare() {
+    }
+
+    void output() {
+        cout << res;
+    }
+
+    void solution() {
+        number_of_elements(root);
+    }
+
+    void number_of_elements(TreeNode<int>* root) {
+        if (root) {
+            res++;
+            number_of_elements(root->left);
+            number_of_elements(root->right);
         }
     }
-    
+
 public:
 
     Solution() {
         root = NULL;
-        size = 0;
+        res = 0;
     }
 
     void solve() {
@@ -102,6 +116,7 @@ public:
         solution();
         output();
     }
+
 };
 
 int main() {

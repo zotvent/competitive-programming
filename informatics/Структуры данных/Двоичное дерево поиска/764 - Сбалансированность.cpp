@@ -27,80 +27,96 @@ using namespace std;
 typedef long long ll;
 typedef pair<int, int> pii;
 
-const int inf = 1e9;
-const int N = 1e5+5;
+const int inf = 1e9 + 5;
+const int N = 1e4 + 5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
+template <typename T>
 struct TreeNode {
-    int val;
-    TreeNode* left;
-    TreeNode* right;
 
-    TreeNode(int x) {
+    T val;
+    TreeNode<T>* left;
+    TreeNode<T>* right;
+
+    TreeNode(T x) {
         val = x;
         left = NULL;
         right = NULL;
     }
+
 };
 
-TreeNode* add(TreeNode* root, int x) {
-    if (!root)
-        return new TreeNode(x);
-
-    if (x < root->val)
-        root->left = add(root->left, x);
-    else if (root->val < x)
-        root->right = add(root->right, x);
-
-    return root;
-}
-
 class Solution {
+
     int x;
     bool balanced;
-    TreeNode* root;
-    
+    TreeNode<int>* root;
+
     void print() {
     }
-    
+
     void input() {
         speed
         freopen("input.txt", "r", stdin);
         freopen("output.txt", "w", stdout);
-        while(cin >> x) {
-            if (x == 0) break;
-            root = add(root, x);
+        while (cin >> x) {
+            if (x == 0) {
+                break;
+            }
+
+            root = insert(root, x);
         }
     }
-    
+
+    TreeNode<int>* insert(TreeNode<int>* root, int x) {
+        if (root) {
+            if (x > root->val) {
+                root->right = insert(root->right, x);
+            }
+            else if (x < root->val) {
+                root->left = insert(root->left, x);
+            }
+        }
+        else {
+            root = new TreeNode<int>(x);
+        }
+
+        return root;
+    }
+
+    void prepare() {
+    }
+
     void output() {
         cout << (balanced ? "YES" : "NO");
     }
-    
+
     void solution() {
-        dfs(root, 0);
+        balanced = true;
+        height(root);
     }
 
-    int dfs(TreeNode* root, int h) {
-        if (root) {
-            int left = dfs(root->left, h + 1);
-            int right = dfs(root->right, h + 1);
-
-            if (abs(left - right) > 1)
-                balanced = false;
-
-            return max(left, right);
+    int height(TreeNode<int>* root) {
+        if (!root) {
+            return 0;
         }
-        else return h;
+
+        int left = height(root->left);
+        int right = height(root->right);
+
+        if (abs(left - right) > 1) {
+            balanced = false;
+        }
+
+        return max(left, right) + 1;
     }
-    
+
 public:
 
     Solution() {
         root = NULL;
-        balanced = true;
     }
 
     void solve() {
@@ -108,6 +124,7 @@ public:
         solution();
         output();
     }
+
 };
 
 int main() {
