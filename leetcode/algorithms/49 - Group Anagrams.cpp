@@ -4,15 +4,16 @@ public:
         vector<vector<string>> res;
         
         unordered_map<string, vector<string>> m;
-        string unsorted;
+        string key;
+        
         for (int i = 0; i < strs.size(); i++) {
-            unsorted = strs[i];
-            sort(strs[i].begin(), strs[i].end());
-            m[strs[i]].push_back(unsorted);
+            key = strs[i];
+            sort(key.begin(), key.end());
+            m[key].push_back(strs[i]);
         }
-                
-        for (auto it = m.begin(); it != m.end(); ++it) {
-            res.push_back(it->second);
+        
+        for (auto i = m.begin(); i != m.end(); i++) {
+            res.push_back(i->second);
         }
         
         return res;
