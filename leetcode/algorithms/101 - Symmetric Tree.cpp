@@ -11,11 +11,40 @@ class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
         if (!root) return true;
-        return dfs(root->left, root->right);
-    }
-    
-    bool dfs(TreeNode* left, TreeNode* right) {
-        if (left == NULL || right == NULL) return left == right;
-        return left->val == right->val && dfs(left->left, right->right) && dfs(left->right, right->left);
+        
+        bool res = true;
+        
+        queue<TreeNode*> q;
+        q.push(root->left);
+        q.push(root->right);
+        
+        TreeNode* left = NULL;
+        TreeNode* right = NULL;
+        
+        while (!q.empty()) {
+            left = q.front(); q.pop();
+            right = q.front(); q.pop();
+            
+            if (left && right) {
+                if (left->val != right->val) {
+                    res = false;
+                    break;
+                }
+                else {
+                    q.push(left->left);
+                    q.push(right->right);
+                    
+                    q.push(left->right);
+                    q.push(right->left);
+                }
+            }
+            else if (!left && !right) {}
+            else {
+                res = false;
+                break;
+            }
+        }
+        
+        return res;
     }
 };
