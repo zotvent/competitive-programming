@@ -1,18 +1,19 @@
 class Solution {
 public:
     int countPrimes(int n) {
-        if (n < 3) return 0;
+        vector<bool> isPrime(n + 1, true);
         
-        int res = 1;
-        int upper = sqrt(n);
-        vector<bool> used(n);
-        for (int i = 3; i < n; i += 2) {
-            if (!used[i]) {
-                res++;
-                if (i > upper) continue;
-                for (int j = i*i; j < n; j += i)
-                    used[j] = true;
+        for (int i = 2; i * i < n; i++) {
+            if (!isPrime[i]) continue;
+            
+            for (int j = i * i; j < n; j += i) {
+                isPrime[j] = false;
             }
+        }
+        
+        int res = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime[i]) res++;
         }
         return res;
     }

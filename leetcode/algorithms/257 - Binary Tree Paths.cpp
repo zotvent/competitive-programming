@@ -7,24 +7,24 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-class Solution {    
+class Solution {
 public:
     vector<string> binaryTreePaths(TreeNode* root) {
         vector<string> res;
-        if (root)
-            dfs(root, "", res);
+        if (root) binaryTreePaths(root, res, "");
         return res;
     }
     
-    void dfs(TreeNode* root, string s, vector<string> &v) {
-        if (!root) return;
+    void binaryTreePaths(TreeNode* root, vector<string>& res, string cur) {
+        cur += to_string(root->val);
         
         if (!root->left && !root->right) {
-            v.push_back(s + to_string(root->val));
+            res.push_back(cur);
             return;
         }
         
-        dfs(root->left, s + to_string(root->val) + "->", v);
-        dfs(root->right, s + to_string(root->val) + "->", v);
+        cur += "->";
+        if (root->left) binaryTreePaths(root->left, res, cur);
+        if (root->right) binaryTreePaths(root->right, res, cur);
     }
 };
