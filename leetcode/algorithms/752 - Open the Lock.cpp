@@ -1,45 +1,56 @@
 class Solution {
 public:
     int openLock(vector<string>& deadends, string target) {
-        map<string, int> dict;
-        for (int i = 0; i < deadends.size(); i++)
-            dict[deadends[i]] = 1;
+        int moves = 0;
         
-        map<string, int> used, d;
+        unordered_set<string> used;
         queue<string> q;
-        string start = "0000";
+        q.push("0000");
         
-        used[start] = 1;
-        d[start] = 0;
-        q.push(start);
-        
-        if (!dict[start]) {
-            while (!q.empty()) {
-                string v = q.front();
-                q.pop();
-                for (int index = 0; index < 4; index++) {
-                    for (int dir = -1; dir <= 1; dir += 2) {
-                        string to = rotate(v, index, dir);
-                        if (!used[to] && !dict[to]) {
-                            used[to] = 1;
-                            q.push(to);
-                            d[to] = d[v] + 1;
-                        }  
-                    }
-                }
-            }
+        for (int i = 0; i < deadends.size(); i++) {
+            used.insert(deadends[i]);
         }
         
-        return (used[target] == 1 ? d[target] : -1);
+        string v, to;
+        int sz;
+        char c;
+        
+        while (!q.empty()) {
+            sz = q.size();
+            
+            for (int o = 0; o < sz; o++) {
+                v = q.front();
+                q.pop();
+                
+                if (used.count(v) > 0) continue;
+                if (v == target) return moves;
+                
+                for (int i = 0; i < 4; i++) {
+                    for (int j = -1; j <= 1; j += 2) {
+                        c = next(v[i], j);
+                        
+                        to = v;
+                        to[i] = c;
+                        
+                        if (used.count(to) == 0) {
+                            q.push(to);
+                        }
+                    }
+                }
+                
+                used.insert(v);
+            }
+            
+            moves++;
+        }
+        
+        return -1;
     }
     
-    string rotate(string s, int index, int dir) {
-        if (s[index] == '0' && dir == -1)
-            s[index] = '9';
-        else if (s[index] == '9' && dir == 1)
-            s[index] = '0';
-        else
-            s[index] += dir;
-        return s;
+    char next(char c, int dif) {
+        c += dif;
+        if (c > '9') c = '0';
+        if (c < '0') c = '9';
+        return c;
     }
 };
