@@ -1,24 +1,31 @@
 class Solution {
 public:
-    vector<int> nextGreaterElement(vector<int>& findNums, vector<int>& nums) {
-        vector<int> res;
-        map<int, int> m;
-        stack<int> s;
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> m;
+        stack<int> prev;
         
-        for (int i = 0; i < nums.size(); i++) {
-            m[nums[i]] = -1;
-            if (s.empty()) s.push(nums[i]);
+        for (int i = nums2.size() - 1; i >= 0; i--) {
+            m[nums2[i]] = -1;
+            
+            if (prev.empty()) prev.push(nums2[i]);
             else {
-                while (!s.empty() && s.top() < nums[i]) {
-                    m[s.top()] = nums[i];
-                    s.pop();
+                while (!prev.empty() && prev.top() < nums2[i]) {
+                    prev.pop();
                 }
-                s.push(nums[i]);
+                
+                if (!prev.empty()) {
+                    m[nums2[i]] = prev.top();
+                }
+                
+                prev.push(nums2[i]);
             }
         }
         
-        for (int i = 0; i < findNums.size(); i++)
-            res.push_back(m[findNums[i]]);
+        vector<int> res;
+        
+        for (int i = 0; i < nums1.size(); i++) {
+            res.push_back(m[nums1[i]]);
+        }
         
         return res;
     }

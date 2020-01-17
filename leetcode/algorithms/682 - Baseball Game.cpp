@@ -1,33 +1,27 @@
 class Solution {
 public:
     int calPoints(vector<string>& ops) {
-        int res = 0;
-        stack<int> scores;
+        stack<int> points;
+        
+        int last, pre_last;
         
         for (int i = 0; i < ops.size(); i++) {
             if (ops[i] == "+") {
-                int last = scores.top();
-                scores.pop();
-                int pre_last = scores.top();
-                
-                scores.push(last);
-                scores.push(last + pre_last);
+                last = points.top(); points.pop();
+                pre_last = points.top();
+                points.push(last);
+                points.push(last + pre_last);
             }
-            else if (ops[i] == "D") {
-                scores.push(scores.top() * 2);
-            }
-            else if (ops[i] == "C") {
-                scores.pop();
-            }
-            else {
-                scores.push(stoi(ops[i]));
-            }
+            else if (ops[i] == "D") points.push(2 * points.top());
+            else if (ops[i] == "C") points.pop();
+            else points.push(stoi(ops[i]));
         }
         
-        while (!scores.empty()) {
-            int top = scores.top();
-            scores.pop();
-            res += top;
+        int res = 0;
+        
+        while (!points.empty()) {
+            res += points.top();
+            points.pop();
         }
         
         return res;
