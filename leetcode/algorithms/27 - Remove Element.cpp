@@ -1,16 +1,14 @@
 class Solution {
 public:
-    int removeElement(vector<int>& nums, int val) {
-        int cnt = nums.size();
-        while (cnt) {
-            cnt--;
-            if (nums.size() > 0) {
-                int front = nums[0];
-                nums.erase(nums.begin());
-                if (front != val)
-                    nums.push_back(front);
+    int removeElement(vector<int>& nums, int val) {        
+        int slow = 0;
+        
+        for (int fast = 0; fast < nums.size(); fast++) {
+            if (nums[fast] != val) {
+                nums[slow++] = nums[fast];
             }
         }
-        return nums.size();
+        
+        return slow;
     }
 };
