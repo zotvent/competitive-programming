@@ -28,38 +28,42 @@ typedef long long ll;
 typedef pair<int, int> pii;
 
 const int inf = 1e9;
-const int N = 1e5+5;
+const int N = 1e5 + 5;
 const int mod = 1743;
 const int MAX = 1e6;
 const int shift = 4;
 
 class Solution {
     int n;
-    
+
     void print() {
     }
-    
-    void input() {
+
+    void prepare() {
         speed
         freopen("input.txt", "r", stdin);
         freopen("output.txt", "w", stdout);
+    }
+
+    void input() {
         cin >> n;
     }
-    
+
     void output() {
         cout << n;
     }
-    
+
     void solution() {
         n++;
     }
-    
+
 public:
 
     Solution() {
     }
 
     void solve() {
+        prepare();
         input();
         solution();
         output();
