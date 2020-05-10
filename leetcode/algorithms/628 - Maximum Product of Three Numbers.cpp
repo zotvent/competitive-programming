@@ -1,8 +1,32 @@
 class Solution {
 public:
     int maximumProduct(vector<int>& nums) {
-        int size = nums.size();
-        sort(nums.begin(), nums.end());
-        return max(nums[0]*nums[1]*nums[size-1], nums[size-1]*nums[size-2]*nums[size-3]);
+        vector<int> mn(2, INT_MAX);
+        vector<int> mx(3, INT_MIN);
+        
+        for (auto i: nums) {
+            if (i < mn[0]) {
+                mn[1] = mn[0];
+                mn[0] = i;
+            }
+            else if (i < mn[1]) {
+                mn[1] = i;
+            }
+            
+            if (i > mx[2]) {
+                mx[0] = mx[1];
+                mx[1] = mx[2];
+                mx[2] = i;
+            }
+            else if (i > mx[1]) {
+                mx[0] = mx[1];
+                mx[1] = i;
+            }
+            else if (i > mx[0]) {
+                mx[0] = i;
+            }
+        }
+        
+        return max(mn[0] * mn[1] * mx[2], mx[0] * mx[1] * mx[2]);
     }
 };
