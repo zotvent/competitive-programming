@@ -1,21 +1,16 @@
 class Solution {
 public:
     string reverseWords(string s) {
-        string res = s;
-        int begin = 0;
-
-        for (int i = 0; i < res.length(); i++)
-            if (s[i] == ' ') {
-                reverse(res, begin, i);
-                begin = i + 1;
+        int head = 0;
+        int n = s.size();
+        
+        for (int i = 0; i < n; i++) {
+            if (s[i] == ' ' || i == n - 1) {
+                reverse(s.begin() + head, s.begin() + i + (i == n - 1));
+                head = i + 1;
             }
-        reverse(res, begin, res.length());
-
-        return res;
-    }
-
-    void reverse(string& s, int from, int to) {
-        for (int j = 0; j < (to - from) / 2; j++)
-            swap(s[from + j], s[to - j - 1]);
+        }
+        
+        return s;
     }
 };

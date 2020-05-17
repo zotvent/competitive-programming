@@ -1,6 +1,10 @@
 class Solution {
 public:
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        if (image[sr][sc] == newColor) {
+            return image;
+        }
+
         vector<vector<int>> res = image;
         
         int n = image.size();
