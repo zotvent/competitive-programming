@@ -3,38 +3,58 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution {    
 public:
     bool isPalindrome(ListNode* head) {
-        ListNode* reverse = NULL;
-        ListNode* copy = head;
+        ListNode* slow = head;
+        ListNode* fast = head;
         
-        while (copy) {
-            ListNode* node = new ListNode(copy->val);
+        while (fast) {
+            slow = slow->next;
+            fast = fast->next;
             
-            if (reverse) {    
-                node->next = reverse;
+            if (fast) {
+                fast = fast->next;
             }
-            
-            reverse = node;
-            copy = copy->next;
         }
         
-        bool equals = true;
+        bool res = true;
         
-        while (reverse && head) {
-            if (reverse->val != head->val) {
-                equals = false;
+        ListNode* reversedHalf = reverse(slow);
+        
+        slow = head;
+        fast = reversedHalf;
+        
+        while (reversedHalf) {
+            if (reversedHalf->val != head->val) {
+                res = false;
                 break;
             }
-            
-            reverse = reverse->next;
             head = head->next;
+            reversedHalf = reversedHalf->next;
         }
         
-        return equals;
+        reverse(fast);
+        
+        return res;
+    }
+    
+    ListNode* reverse(ListNode* head) {
+        ListNode* prev = NULL;
+        ListNode* next = NULL;
+        
+        while (head) {
+            next = head->next;
+            head->next = prev;
+            prev = head;
+            head = next;
+        }
+        
+        return prev;
     }
 };

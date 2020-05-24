@@ -4,31 +4,31 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
-    TreeNode* bstFromPreorder(vector<int>& preorder) { 
-        return build(preorder, 0, INT_MIN, INT_MAX);
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        int cur = 0;
+        return dfs(preorder, cur, INT_MIN, INT_MAX);
     }
     
-    TreeNode* build(vector<int>& preorder, int index, int min_value, int max_value) {
-        if (index >= preorder.size()) {
+    TreeNode* dfs(vector<int>& preorder, int& cur, int mn, int mx) {
+        if (cur >= preorder.size()) {
             return NULL;
         }
         
-        TreeNode* node = NULL;
-                
-        for (int i = index; i < preorder.size(); i++) {
-            if (preorder[i] > min_value && preorder[i] < max_value) {
-                node = new TreeNode(preorder[i]);
-                node->left = build(preorder, i + 1, min_value, node->val);
-                node->right = build(preorder, i + 1, node->val, max_value);
-                break;
-            }
+        if (preorder[cur] < mn || preorder[cur] > mx) {
+            return NULL;
         }
         
-        return node;
+        TreeNode* root = new TreeNode(preorder[cur++]);
+        root->left = dfs(preorder, cur, mn, root->val);
+        root->right = dfs(preorder, cur, root->val, mx);
+        
+        return root;
     }
 };

@@ -2,38 +2,47 @@ class Solution {
 public:
     string reorganizeString(string S) {
         string res = "";
-        vector<int> cnt(26, 0);
-        int mx = 0;
-        int n =  S.length();
-
-        for (int i = 0; i < n; i++) {
-            cnt[S[i]-'a']++;
-            mx = max(mx, cnt[S[i]-'a']);
+        
+        vector<int> freq(26, 0);
+        
+        for (auto& c: S) {
+            freq[c - 'a'] += 100;
         }
-
-        if (mx <= (n+1) / 2) {
-            for (int i = 0; i < n; i++) {
-                mx = 0;
-                char c = 'a';
-                for (int j = 0; j < 26; j++) {
-                    if (res.length() == 0) {
-                        if (cnt[j] > mx) {
-                            mx = cnt[j];
-                            c = j+'a';
-                        }
-                    }
-                    else {
-                        if (cnt[j] > mx && j+'a' != res[res.length()-1]) {
-                            mx = cnt[j];
-                            c = j+'a';
-                        }
-                    }
-                }
-                res += c;
-                cnt[c-'a']--;
+        for (int i = 0; i < freq.size(); i++) {
+            freq[i] += i;
+        }
+        
+        sort(freq.begin(), freq.end());
+        
+        int head = 0;
+        int tail = freq.size() - 1;
+        
+        int n = S.size();
+        res.resize(n);
+        
+        char c;
+        int cnt;
+        
+        while (tail >= 0) {
+            cnt = freq[tail] / 100;
+            c = 'a' + (freq[tail] % 100);
+            
+            if (cnt > (n + 1) / 2) {
+                res = "";
+                break;
             }
+            
+            for (int i = 0; i < cnt; i++) {
+                res[head] = c;
+                head += 2;
+                if (head >= n) {
+                    head = 1;
+                }
+            }
+            
+            tail--;
         }
-
+        
         return res;
     }
 };
