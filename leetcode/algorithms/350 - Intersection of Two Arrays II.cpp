@@ -1,22 +1,22 @@
 class Solution {
 public:
     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() > nums2.size()) {
+            return intersect(nums2, nums1);
+        }
+        
         vector<int> res;
+        unordered_map<int, int> m;
         
-        sort(nums1.begin(), nums1.end());
-        sort(nums2.begin(), nums2.end());
+        for (auto& i: nums1) {
+            m[i]++;
+        }
         
-        int i = 0;
-        int j = 0;
-        
-        while (i < nums1.size() && j < nums2.size()) {
-            if (nums1[i] == nums2[j]) {
-                res.push_back(nums1[i]);
-                i++;
-                j++;
+        for (auto& i: nums2) {
+            if (m.count(i) > 0 && m[i] > 0) {
+                res.push_back(i);
+                m[i]--;
             }
-            else if (nums1[i] < nums2[j]) i++;
-            else j++;
         }
         
         return res;

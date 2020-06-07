@@ -1,34 +1,30 @@
 class Solution {
 public:
     vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
-        map<string, pair<int, int>> m;
+        vector<string> res;
+        
+        unordered_map<string, int> m;
+        int index;
+        int mn = INT_MAX;
         
         for (int i = 0; i < list1.size(); i++) {
-            m[list1[i]] = make_pair(1, i);
+            m[list1[i]] = i;
         }
+        
         for (int i = 0; i < list2.size(); i++) {
-            if (m.find(list2[i]) != m.end()) {
-                m[list2[i]].first++;
-                m[list2[i]].second += i;
+            if (m.count(list2[i]) > 0) {
+                index = m[list2[i]];
+                
+                if (i + index <= mn) {
+                    if (i + index < mn) {
+                        res.clear();
+                        mn = i + index;
+                    }
+                    res.push_back(list2[i]);
+                }
             }
         }
         
-        int least = 3000;
-        for (map<string, pair<int, int>>::iterator it = m.begin(); it != m.end(); it++) {
-            pair<int, int> p = it->second;
-            if (p.first == 2 && p.second < least) {
-                least = p.second;
-            }
-        }
-        
-        vector<string> ans;
-        for (map<string, pair<int, int>>::iterator it = m.begin(); it != m.end(); it++) {
-            pair<int, int> p = it->second;
-            if (p.first == 2 && p.second == least) {
-                ans.push_back(it->first);
-            }
-        }
-        
-        return ans;
+        return res;
     }
 };
