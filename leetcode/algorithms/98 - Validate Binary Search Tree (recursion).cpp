@@ -4,34 +4,31 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
-public:
-    bool isValidBST(TreeNode* root) {
-        if (!root) return true;
+    
+    void dfs(TreeNode* root, long long mx, long long mn, bool& res) {
+        if (!root) {
+            return;
+        }
+                
+        if (root->val >= mx || root->val <= mn) {
+            res = false;
+            return;
+        }
         
-        bool res = true;
-        dfs(root, res);
-        return res;
+        dfs(root->left, root->val, mn, res);
+        dfs(root->right, mx, root->val, res);
     }
     
-    pair<int, int> dfs(TreeNode* root, bool& res) {
-        pair<int, int> p = make_pair(root->val, root->val);
-        
-        if (root->left) {
-            pair<int, int> left = dfs(root->left, res);
-            if (left.second >= root->val) res = false;
-            p.first = min(left.first, p.first);
-        }
-        
-        if (root->right) {
-            pair<int, int> right = dfs(root->right, res);
-            if (right.first <= root->val) res = false;
-            p.second = max(right.second, p.second);
-        }
-        
-        return p;
+public:
+    bool isValidBST(TreeNode* root) {
+        bool res = true;
+        dfs(root, LONG_MAX, LONG_MIN, res);
+        return res;
     }
 };
