@@ -2,10 +2,14 @@
 // Definition for a Node.
 class Node {
 public:
-    int val = NULL;
+    int val;
     vector<Node*> children;
 
     Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
 
     Node(int _val, vector<Node*> _children) {
         val = _val;
@@ -13,30 +17,46 @@ public:
     }
 };
 */
+
 class Solution {
 public:
     vector<vector<int>> levelOrder(Node* root) {
-        if (!root) return vector<vector<int>>();
-
         vector<vector<int>> res;
-
+        
         queue<Node*> q;
         q.push(root);
+        
+        Node* v;
+        int size;
+        vector<int> level;
+        
         while (!q.empty()) {
-            int size = q.size();
-            vector<int> level;
-
-            for (int i = 0; i < size; i++) {
-                Node* v = q.front();
+            size = q.size();
+            
+            while (size) {
+                v = q.front();
                 q.pop();
-                level.push_back(v->val);
-                for (auto c : v->children)
-                    q.push(c);
+                
+                if (v) {
+                    level.push_back(v->val);
+                    
+                    for (auto& ch: v->children) {
+                        if (ch) {
+                            q.push(ch);
+                        }
+                    }
+                }
+                
+                size--;
             }
-
-            res.push_back(level);
+            
+            if (!level.empty()) {
+                res.push_back(level);
+            }
+            
+            level.clear();
         }
-
+        
         return res;
     }
 };

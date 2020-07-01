@@ -2,25 +2,22 @@ class Solution {
 public:
     int arrangeCoins(int n) {
         int res = 0;
-        long long tmp = n;
         
-        long long l = 0;
-        long long r = n;
+        int l = 0;
+        int r = n;
+        int m;
+        long long sum;
         
         while (l <= r) {
-            long long m = l + (r - l) / 2;
-            long long sum = (m + m * m) / 2;
+            m = l + (r - l) / 2;
+            sum = (1L + m) * m / 2L;
             
-            if (sum == tmp) {
-                res = m;
-                break;
-            }
-            if (sum > tmp) {
-                r = m - 1;
+            if (sum <= n) {
+                res = max(res, m);
+                l = m + 1;
             }
             else {
-                l = m + 1;
-                res = m;
+                r = m - 1;
             }
         }
         
