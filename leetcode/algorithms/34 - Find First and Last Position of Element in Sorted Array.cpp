@@ -1,39 +1,34 @@
 class Solution {
-public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        int start = binary_search(nums, target, true, 0);
-        int end = -1;
-                
-        if (start == nums.size()) start = -1;
-        else end = binary_search(nums, target, false, start);
-        
-        return {start, end};
-    }
     
-    int binary_search(vector<int>& nums, int target, bool leftMost, int start) {
-        int res = leftMost ? nums.size() : 0;
-        
-        int l = start;
+    int findExtremeIndex(vector<int>& nums, int target, bool leftMost) {
+        int l = 0;
         int r = nums.size() - 1;
         int m;
         
-        while (l <= r) {
+        while (l + 1 < r) {
             m = l + (r - l) / 2;
             
-            if (nums[m] == target) {
-                if (leftMost) {
-                    res = min(res, m);
-                    r = m - 1;
-                }
-                else {
-                    res = max(res, m);
-                    l = m + 1;
-                }
-            }
-            else if (nums[m] > target) r = m - 1;
-            else l = m + 1;
+            if (nums[m] > target || (leftMost && nums[m] == target)) r = m;
+            else l = m;
         }
         
-        return res;
+        if (!leftMost) {
+            swap(l, r);
+        }
+        
+        if (nums[l] == target) return l;
+        if (nums[r] == target) return r;
+        return -1;
+    }
+    
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if (nums.empty()) {
+            return {-1, -1};
+        }
+        
+        int l = findExtremeIndex(nums, target, true);
+        int r = findExtremeIndex(nums, target, false);
+        return {l, r};
     }
 };

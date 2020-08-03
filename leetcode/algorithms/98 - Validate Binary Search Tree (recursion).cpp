@@ -11,24 +11,25 @@
  */
 class Solution {
     
-    void dfs(TreeNode* root, long long mx, long long mn, bool& res) {
+    bool dfs(TreeNode* root, long long minValue, long long maxValue) {
         if (!root) {
-            return;
-        }
-                
-        if (root->val >= mx || root->val <= mn) {
-            res = false;
-            return;
+            return true;
         }
         
-        dfs(root->left, root->val, mn, res);
-        dfs(root->right, mx, root->val, res);
+        if (root->val <= minValue || root->val >= maxValue) {
+            return false;
+        }
+        
+        bool left = dfs(root->left, minValue, root->val);
+        bool right = dfs(root->right, root->val, maxValue);
+        
+        return left && right;
     }
     
 public:
     bool isValidBST(TreeNode* root) {
-        bool res = true;
-        dfs(root, LONG_MAX, LONG_MIN, res);
-        return res;
+        long long minValue = -1L + INT_MIN; 
+        long long maxValue = 1L + INT_MAX;
+        return dfs(root, minValue, maxValue);
     }
 };

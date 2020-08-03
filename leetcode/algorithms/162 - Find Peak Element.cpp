@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int findMin(vector<int>& nums) {
+    int findPeakElement(vector<int>& nums) {
         int l = 0;
         int r = nums.size() - 1;
         int m;
@@ -8,14 +8,14 @@ public:
         while (l < r) {
             m = l + (r - l) / 2;
             
-            if (nums[m] > nums[r]) {
-                l = m + 1;
+            if (nums[m] > nums[m + 1]) {
+                r = m;
             }
             else {
-                r = m;
+                l = m + 1;
             }
         }
         
-        return nums[l];
+        return l;
     }
 };

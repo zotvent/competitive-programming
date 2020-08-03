@@ -12,16 +12,10 @@ public:
         If this method returns false, the message will not be printed.
         The timestamp is in seconds granularity. */
     bool shouldPrintMessage(int timestamp, string message) {
-        if (logs.count(message) == 0) {
+        if (logs.count(message) == 0 || timestamp - logs[message] >= 10) {
             logs[message] = timestamp;
             return true;
         }
-
-        if (timestamp - logs[message] >= 10) {
-            logs[message] = timestamp;
-            return true;
-        }
-        
         return false;
     }
 };

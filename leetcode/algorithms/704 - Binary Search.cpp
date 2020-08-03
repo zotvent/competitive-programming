@@ -3,15 +3,15 @@ public:
     int search(vector<int>& nums, int target) {
         int l = 0;
         int r = nums.size() - 1;
+        int m;
         
         while (l <= r) {
-            int m = (l + r) / 2;
-            int x = nums[m];
+            m = l + (r - l) / 2;
             
-            if (x == target) {
+            if (nums[m] == target) {
                 return m;
             }
-            else if (x < target) {
+            else if (nums[m] < target) {
                 l = m + 1;
             }
             else {
