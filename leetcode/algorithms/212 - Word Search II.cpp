@@ -1,85 +1,82 @@
 class Solution {
     
     struct TrieNode {
-        unordered_map<char, TrieNode*> children;
-        bool formsWord;
+        unordered_map<char, TrieNode*> next;
         string word;
+        bool isWord;
         
         TrieNode() {
-            formsWord = false;
             word = "";
+            isWord = false;
         }
     };
     
-    TrieNode* root;
-    const vector<vector<int>> d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-    vector<vector<char>> board;
-    int rows, cols;
+    const vector<vector<int>> d = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     
-    void buildTrie(vector<string>& words) {
-        root = new TrieNode();
+    TrieNode* buildTrie(vector<string>& words) {
+        TrieNode* root = new TrieNode();
+        TrieNode* cur;
         
         for (auto& word: words) {
-            TrieNode* cur = root;
+            cur = root;
             
             for (auto& c: word) {
-                if (cur->children.count(c) > 0) {
-                    cur = cur->children[c];
+                if (!cur->next[c]) {
+                    cur->next[c] = new TrieNode();
                 }
-                else {
-                    cur->children[c] = new TrieNode();
-                    cur = cur->children[c];
-                }
+                cur = cur->next[c];
             }
             
-            cur->formsWord = true;
+            cur->isWord = true;
             cur->word = word;
         }
+        
+        return root;
     }
     
-    void backtrack(int row, int col, TrieNode* parent, vector<string>& res) {
-        char letter = board[row][col];
-        TrieNode* cur = parent->children[letter];
+    void find(vector<vector<char>>& board, int row, int col, TrieNode* parent, vector<string>& res) {
+        char originalLetter = board[row][col];
+        TrieNode* cur = parent->next[originalLetter];
         
-        if (cur->formsWord) {
+        int rows = board.size();
+        int cols = (board.empty()) ? 0 : board[0].size();
+        
+        if (cur->isWord) {
             res.push_back(cur->word);
-            cur->formsWord = false;
+            cur->isWord = false;
             cur->word.clear();
         }
         
         board[row][col] = '.';
+        
         int x, y;
         
         for (int i = 0; i < d.size(); i++) {
             x = row + d[i][0];
             y = col + d[i][1];
             
-            if (valid(x, y) && cur->children.count(board[x][y]) > 0) {
-                backtrack(x, y, cur, res);
+            if (valid(rows, cols, x, y) && cur->next[board[x][y]]) {
+                find(board, x, y, cur, res);
             }
         }
         
-        board[row][col] = letter;
+        board[row][col] = originalLetter;
     }
     
-    bool valid(int r, int c) {
-        return r >= 0 && c >= 0 && r < rows && c < cols;
+    bool valid(int rows, int cols, int row, int col) {
+        return row >= 0 && col >= 0 && row < rows && col < cols;
     }
     
 public:
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
         vector<string> res;
         
-        this->board = board;
-        rows = board.size();
-        cols = (board.empty() ? 0 : board[0].size());        
-        
-        buildTrie(words);
+        TrieNode* root = buildTrie(words);
         
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board[i].size(); j++) {
-                if (root->children.count(board[i][j]) > 0) {
-                    backtrack(i, j, root, res);
+                if (root->next[board[i][j]]) {
+                    find(board, i, j, root, res);
                 }
             }
         }
