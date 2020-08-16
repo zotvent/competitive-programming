@@ -1,12 +1,17 @@
 class Solution {
+    
+    int toBase26(char c) {
+        return c - 'A' + 1;
+    }
+    
 public:
     int titleToNumber(string s) {
         int res = 0;
-        int multi = 1;
-        for (int i = s.length()-1; i >= 0; i--) {
-            res += ((int) (s[i] - 'A') + 1) * multi;
-            multi *= 26;
+        
+        for (auto& c: s) {
+            res = res * 26 + toBase26(c);
         }
+        
         return res;
     }
 };
