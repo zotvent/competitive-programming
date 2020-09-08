@@ -1,26 +1,24 @@
-// Forward declaration of isBadVersion API.
-bool isBadVersion(int version);
+// The API isBadVersion is defined for you.
+// bool isBadVersion(int version);
 
 class Solution {
 public:
     int firstBadVersion(int n) {
-        int res;
-        
         int l = 1;
         int r = n;
+        int m;
         
-        while (l <= r) {
-            int m = (r - l) / 2 + l;
+        while (l < r) {
+            m = l + (r - l) / 2;
             
             if (isBadVersion(m)) {
-                res = m;
-                r = m - 1;
+                r = m;
             }
             else {
                 l = m + 1;
             }
         }
         
-        return res;
+        return l;
     }
 };
