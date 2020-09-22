@@ -2,30 +2,29 @@
       bool knows(int a, int b); */
 
 class Solution {
+    
+    bool isCelebrity(int i, int n) {
+        for (int j = 0; j < n; j++) {
+            if (i == j) continue;
+            
+            if (knows(i, j) || !knows(j, i)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
 public:
     int findCelebrity(int n) {
         int candidate = 0;
         
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i < n; i++) {
             if (knows(candidate, i)) {
                 candidate = i;
             }
         }
         
-        if (isCelebrity(candidate, n)) {
-            return candidate;
-        }
-        
-        return -1;
+        return isCelebrity(candidate, n) ? candidate : -1;
     }
-    
-    bool isCelebrity(int x, int n) {
-        for (int i = 0; i < n; i++) {
-            if (i == x) continue;
-            if (knows(x, i) || !knows(i, x)) {
-                return false;
-            }
-        }
-        return true;
-    } 
 };

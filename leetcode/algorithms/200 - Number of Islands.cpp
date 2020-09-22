@@ -1,14 +1,48 @@
 class Solution {
+    
+    void bfs(vector<vector<char>>& grid, vector<vector<int>>& used, int row, int col) {
+        queue<vector<int>> q;
+        q.push({row, col});
+        used[row][col] = 1;
+        
+        const int rows = grid.size();
+        const int cols = (grid.empty()) ? 0 : grid[0].size();
+        
+        vector<vector<int>> d = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        vector<int> v;
+        int x, y;
+        
+        while (!q.empty()) {
+            v = q.front();
+            q.pop();
+            
+            for (int i = 0; i < d.size(); i++) {
+                x = v[0] + d[i][0];
+                y = v[1] + d[i][1];
+                
+                if (valid(x, y, rows, cols) && !used[x][y] && grid[x][y] == '1') {
+                    q.push({x, y});
+                    used[x][y] = 1;
+                }
+            }
+        }
+    }
+    
+    bool valid(int x, int y, int rows, int cols) {
+        return x >= 0 && y >= 0 && x < rows && y < cols;
+    }
+    
 public:
     int numIslands(vector<vector<char>>& grid) {
         int res = 0;
         
-        int n = grid.size();
-        int m = (grid.empty() ? 0 : grid[0].size());
-        vector<vector<int>> used(n, vector<int>(m, 0));
+        const int rows = grid.size();
+        const int cols = (grid.empty()) ? 0 : grid[0].size();
         
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < grid[i].size(); j++) {
+        vector<vector<int>> used(rows, vector<int>(cols, 0));
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 if (!used[i][j] && grid[i][j] == '1') {
                     bfs(grid, used, i, j);
                     res++;
@@ -17,42 +51,5 @@ public:
         }
         
         return res;
-    }
-    
-    void bfs(vector<vector<char>>& grid, vector<vector<int>>& used, int row, int col) {
-        int n = grid.size();
-        int m = (grid.empty() ? 0 : grid[0].size());
-        
-        queue<pair<int, int>> q;
-        q.push(make_pair(row, col));
-        used[row][col] = 1;
-        
-        pair<int, int> v;
-        int sz, x, y;
-        int dx[] = {0, 0, 1, -1};
-        int dy[] = {1, -1, 0, 0};
-        
-        while (!q.empty()) {
-            sz = q.size();
-            
-            for (int o = 0; o < sz; o++) {
-                v = q.front();
-                q.pop();
-                
-                for (int i = 0; i < 4; i++) {
-                    x = v.first + dx[i];
-                    y = v.second + dy[i];
-                    
-                    if (valid(x, y, n, m) && !used[x][y] && grid[x][y] == '1') {
-                        q.push(make_pair(x, y));
-                        used[x][y] = 1;
-                    }
-                }
-            }
-        }
-    }
-    
-    bool valid(int x, int y, int rows, int cols) {
-        return x >= 0 && y >= 0 && x < rows && y < cols;
     }
 };

@@ -8,67 +8,68 @@
  * };
  */
 class Codec {
-private:
-    TreeNode* dfs(string& data, int l, int r) {
-        if (l > r) {
+    
+    void doSerialize(TreeNode* root, string& res) {
+        if (!res.empty()) {
+            res.push_back(',');
+        }
+        
+        if (!root) {
+            res += "null";
+            return;
+        }
+        
+        res += to_string(root->val);
+        doSerialize(root->left, res);
+        doSerialize(root->right, res);
+    }
+    
+    TreeNode* doDeserialize(queue<string>& q) {
+        if (q.empty()) {
             return NULL;
         }
         
-        int open = 0;
-        int close = 0;
-        int head = l;
+        string front = q.front();
+        q.pop();
         
-        do {
-            if (data[head] == '{') {
-                open++;
-            }
-            else if (data[head] == '}') {
-                close++;
-            }
-            
-            head++;
-        } while (open != close && head < r);
-        
-        int leftComma = head;
-        
-        head++;
-        while (data[head] != ',') {
-            head++;
+        if (front == "null") {
+            return NULL;
         }
         
-        int rightComma = head;
+        TreeNode* res = new TreeNode(stoi(front));
+        res->left = doDeserialize(q);
+        res->right = doDeserialize(q);
         
-        TreeNode* root = new TreeNode(stoi(data.substr(leftComma + 1, rightComma - leftComma - 1)));
+        return res;
+    }
+    
+    queue<string> split(string& data) {
+        queue<string> q;
+        int start = 0;
         
-        root->left = dfs(data, l + 1, leftComma - 2);
-        root->right = dfs(data, rightComma + 2, r - 1);
+        for (int i = 0; i <= data.size(); i++) {
+            if (data[i] == ',' || i == data.size()) {
+                q.push(data.substr(start, i - start));
+                start = i + 1;
+            }
+        }
         
-        return root;
+        return q;
     }
     
 public:
 
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if (!root) {
-            return "{}";
-        }
-        
-        string left = serialize(root->left);
-        string right = serialize(root->right);
-        
-        string res = "{";
-        res += left + ",";
-        res += to_string(root->val);
-        res += "," + right + "}";
-        
+        string res = "";
+        doSerialize(root, res);
         return res;
     }
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        cout << data << endl;
-        return dfs(data, 1, data.size() - 2);
+        queue<string> q = split(data);
+        return doDeserialize(q);
     }
 };
 

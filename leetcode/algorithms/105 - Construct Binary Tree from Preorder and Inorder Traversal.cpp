@@ -10,37 +10,31 @@
  * };
  */
 class Solution {
-private:
-    vector<int> preorder;
-    vector<int> inorder;
-    unordered_map<int, int> m;
-    int head;
     
-public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        this->preorder = preorder;
-        this->inorder = inorder;
-        
-        for (int i = 0; i < inorder.size(); i++) {
-            m[inorder[i]] = i;
-        }
-        
-        head = 0;
-        return calc(0, inorder.size());
-    }
-    
-    TreeNode* calc(int l, int r) {        
-        if (l == r) {
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& in, int& head, int left, int right) {
+        if (left > right) {
             return NULL;
         }
         
         TreeNode* root = new TreeNode(preorder[head]);
+        int rootIndex = in[preorder[head++]];
         
-        int split_index = m[preorder[head++]];
-        
-        root->left = calc(l, split_index);
-        root->right = calc(split_index + 1, r);
+        root->left = buildTree(preorder, inorder, in, head, left, rootIndex - 1);
+        root->right = buildTree(preorder, inorder, in, head, rootIndex + 1, right);
         
         return root;
+    }
+    
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int, int> in;
+        int head = 0;
+        const int n = inorder.size();
+        
+        for (int i = 0; i < n; i++) {
+            in[inorder[i]] = i;
+        }
+        
+        return buildTree(preorder, inorder, in, head, 0, n - 1);
     }
 };

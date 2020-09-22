@@ -1,27 +1,35 @@
 class Solution {
-public:
-    int evalRPN(vector<string>& tokens) {
-        stack<int> st;
-        
-        int l, r;
-        
-        for (int i = 0; i < tokens.size(); i++) {
-            if (isSign(tokens[i])) {
-                r = st.top(); st.pop();
-                l = st.top(); st.pop();
-                
-                if (tokens[i] == "+") st.push(l + r);
-                else if (tokens[i] == "-") st.push(l - r);
-                else if (tokens[i] == "/") st.push(l / r);
-                else st.push(l * r);
-            }
-            else st.push(stoi(tokens[i]));
-        }
-        
-        return st.top();
+    
+    bool isSign(string& s) {
+        return s.size() == 1 && (s == "-" || s == "+" || s == "*" || s == "/");
     }
     
-    bool isSign(string s) {
-        return s == "+" || s == "-" || s == "/" || s == "*";
+    int calc(int left, int right, char sign) {
+        switch (sign) {
+            case '+': left += right; break;
+            case '-': left -= right; break;
+            case '*': left *= right; break;
+            default: left /= right; break;
+        }
+        return left;
+    }
+    
+public:
+    int evalRPN(vector<string>& tokens) {
+        vector<int> nums;
+        int last, preLast;
+        
+        for (auto& i: tokens) {
+            if (isSign(i)) {
+                last = nums.back(); nums.pop_back();
+                preLast = nums.back(); nums.pop_back();
+                nums.push_back(calc(preLast, last, i[0]));
+            }
+            else {
+                nums.push_back(stoi(i));
+            }
+        }
+        
+        return nums.back();
     }
 };

@@ -11,12 +11,10 @@
  */
 class Solution {
 public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> res;
-        
+    int kthSmallest(TreeNode* root, int k) {
         stack<TreeNode*> s;
         
-        while (!s.empty() || root) {
+        while (true) {
             while (root) {
                 s.push(root);
                 root = root->left;
@@ -24,10 +22,12 @@ public:
             
             root = s.top();
             s.pop();
-            res.push_back(root->val);
+            if (--k == 0) {
+                break;
+            }
             root = root->right;
         }
         
-        return res;
+        return root->val;
     }
 };
