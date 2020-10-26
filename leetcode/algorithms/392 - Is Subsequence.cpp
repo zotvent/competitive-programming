@@ -3,8 +3,8 @@ public:
     bool isSubsequence(string s, string t) {
         int head = 0;
         
-        for (int i = 0; i < t.size(); i++) {
-            if (head < s.size() && s[head] == t[i]) {
+        for (int i = 0; i < t.size() && head < s.size(); i++) {
+            if (t[i] == s[head]) {
                 head++;
             }
         }
