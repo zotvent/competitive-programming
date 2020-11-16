@@ -3,35 +3,20 @@ public:
     vector<vector<int>> removeInterval(vector<vector<int>>& intervals, vector<int>& toBeRemoved) {
         vector<vector<int>> res;
         
-        int left = toBeRemoved[0];
-        int right = toBeRemoved[1];
-        
-        int l, r;
-        
-        for (int i = 0; i < intervals.size(); i++) {
-            l = intervals[i][0];
-            r = intervals[i][1];
-            
-            // no intersection
-            if (right <= l || r <= left) {
-                res.push_back(intervals[i]);
+        for (auto& i: intervals) {
+            if (i[1] <= toBeRemoved[0] || i[0] >= toBeRemoved[1]) {
+                res.push_back(i);
             }
-            // remove inside interval
-            else if (l == left && right < r) {
-                res.push_back({right, r});
+            else if (i[0] < toBeRemoved[0] && toBeRemoved[1] < i[1]) {
+                res.push_back({i[0], toBeRemoved[0]});
+                res.push_back({toBeRemoved[1], i[1]});
             }
-            else if (l < left && right < r) {
-                res.push_back({l, left});
-                res.push_back({right, r});
+            else if (i[0] < toBeRemoved[0]) {
+                res.push_back({i[0], toBeRemoved[0]});
             }
-            // remove intersect interval
-            else if (left < l && right < r) {
-                res.push_back({right, r});
+            else if (i[1] > toBeRemoved[1]) {
+                res.push_back({toBeRemoved[1], i[1]});
             }
-            else if (r < right && l < left) {
-                res.push_back({l, left});
-            }
-            
         }
         
         return res;
