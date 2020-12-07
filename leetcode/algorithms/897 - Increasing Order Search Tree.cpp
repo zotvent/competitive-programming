@@ -4,25 +4,34 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     TreeNode* increasingBST(TreeNode* root) {
-        TreeNode* head = new TreeNode(0);
-        TreeNode* tail = head;
-        inorder(root, tail);
-        return head->right;
-    }
-
-    void inorder(TreeNode* root, TreeNode* &tail) {
-        if (root) {
-            inorder(root->left, tail);
-            root->left = NULL;
-            tail->right = root;
-            tail = root;
-            inorder(root->right, tail);
+        TreeNode* res = new TreeNode(0);
+        TreeNode* cur = res;
+        stack<TreeNode*> s;
+        
+        while (!s.empty() || root) {
+            while (root) {
+                s.push(root);
+                root = root->left;
+            }
+            
+            root = s.top();
+            s.pop();
+            
+            cur->right = root;
+            cur = cur->right;
+            cur->left = NULL;
+            
+            root = root->right;
         }
+        
+        return res->right;
     }
 };
