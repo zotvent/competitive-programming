@@ -28,21 +28,24 @@
  * };
  */
 class Solution {
-public:
-    int depthSum(vector<NestedInteger>& nestedList) {
-        return dfs(nestedList, 1);
-    }
     
-    int dfs(vector<NestedInteger>& list, int depth) {
+    int rec(vector<NestedInteger>& nestedList, int depth) {
         int res = 0;
         
-        for (int i = 0; i < list.size(); i++) {
-            if (list[i].isInteger())
-                res += list[i].getInteger() * depth;
-            else
-                res += dfs(list[i].getList(), depth + 1);
+        for (auto& i: nestedList) {
+            if (i.isInteger()) {
+                res += i.getInteger() * depth;
+            }
+            else {
+                res += rec(i.getList(), depth + 1);
+            }
         }
         
         return res;
+    }
+    
+public:
+    int depthSum(vector<NestedInteger>& nestedList) {
+        return rec(nestedList, 1);
     }
 };
