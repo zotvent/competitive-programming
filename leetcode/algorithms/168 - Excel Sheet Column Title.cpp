@@ -1,6 +1,17 @@
 class Solution {
 public:
     string convertToTitle(int n) {
-        return n == 0 ? "" : convertToTitle((n - 1) / 26) + (char) ((n - 1) % 26 + 'A');
+        string res = "";
+        const int base = 26;
+        
+        while (n > 0) {
+            n--;
+            res.push_back(n % base + 'A');
+            n /= base;
+        }
+        
+        reverse(res.begin(), res.end());
+        
+        return res;
     }
 };
