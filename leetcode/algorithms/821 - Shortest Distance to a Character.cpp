@@ -1,27 +1,26 @@
 class Solution {
 public:
-    vector<int> shortestToChar(string S, char C) {
-        vector<int> res(S.size(), 10000);
-        int cur = -1;
-
-        // forward
-        for (int i = 0; i < S.size(); i++) {
-            if (S[i] == C) {
-                res[i] = 0;
-                cur = i;
+    vector<int> shortestToChar(string s, char c) {
+        const int n = s.size();
+        vector<int> res(n, INT_MAX);
+        int last = INT_MAX;
+        
+        for (int i = 0; i < n; i++) {
+            if (s[i] == c) {
+                last = i;
             }
-            else if (cur != -1) {
-                res[i] = min(res[i], abs(i - cur));
-            }
+            res[i] = min(res[i], abs(i - last));
         }
-        // reverse
-        for (int i = S.size() - 1; i >= 0; i--) {
-            if (S[i] == C) {
-                cur = i;
+        
+        last = INT_MAX;
+        
+        for (int i = n - 1; i >= 0; i--) {
+            if (s[i] == c) {
+                last = i;
             }
-            res[i] = min(res[i], abs(i - cur));
+            res[i] = min(res[i], abs(i - last));
         }
-
+        
         return res;
     }
 };

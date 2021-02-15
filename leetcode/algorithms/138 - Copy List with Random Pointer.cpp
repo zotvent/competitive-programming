@@ -18,37 +18,24 @@ class Solution {
 public:
     Node* copyRandomList(Node* head) {
         Node* res = new Node(0);
-        
         Node* cur = head;
-        Node* tail = res;
-        
-        int cnt = 0;
-        
-        unordered_map<Node*, int> original;
-        unordered_map<int, Node*> copy;
+        Node* iter = res;
+        unordered_map<Node*, Node*> comp;
         
         while (cur) {
-            tail->next = new Node(cur->val);
-            
-            original[cur] = cnt;
-            copy[cnt] = tail->next;
-            
-            tail = tail->next;
+            iter->next = new Node(cur->val);
+            comp[cur] = iter->next;
+            iter = iter->next;
             cur = cur->next;
-            cnt++;
         }
         
         cur = head;
-        tail = res->next;
-        cnt = 0;
+        iter = res->next;
         
         while (cur) {
-            if (cur->random) {
-                tail->random = copy[original[cur->random]];
-            }
+            iter->random = comp[cur->random];
+            iter = iter->next;
             cur = cur->next;
-            tail = tail->next;
-            cnt++;
         }
         
         return res->next;
