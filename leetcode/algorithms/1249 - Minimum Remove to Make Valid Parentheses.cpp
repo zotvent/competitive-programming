@@ -2,7 +2,6 @@ class Solution {
 public:
     string minRemoveToMakeValid(string s) {
         string res = "";
-        
         stack<int> brackets;
         unordered_set<int> indexesToRemove;
         
