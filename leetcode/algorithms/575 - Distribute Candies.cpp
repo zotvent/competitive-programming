@@ -1,18 +1,13 @@
 class Solution {
 public:
-    int distributeCandies(vector<int>& candies) {
-        const int N = 200005;
-        int kinds[N], shift = 100000;
-        size_t cnt = 0;
-        for (int i = 0; i < N; i++) {
-            kinds[i] = 0;
+    int distributeCandies(vector<int>& candyType) {
+        unordered_set<int> s;
+        const int n = candyType.size();
+        
+        for (auto& i: candyType) {
+            s.insert(i);
         }
-        for (int i = 0; i < candies.size(); i++) {
-            if (!kinds[candies[i]+shift]) {
-                kinds[candies[i]+shift] = 1;
-                cnt++;
-            }
-        }
-        return min(cnt, candies.size()/2);
+        
+        return min(n / 2, (int) s.size());
     }
 };
