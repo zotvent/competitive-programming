@@ -1,27 +1,24 @@
 class Solution {
+    
+    void calc(int& res, int l, int r, string& s) {
+        const int n = s.size();
+        
+        while (l >= 0 && r < n && s[l] == s[r]) {
+            l--;
+            r++;
+            res++;
+        }
+    }
+    
 public:
     int countSubstrings(string s) {
         int res = 0;
         
         for (int i = 0; i < s.size(); i++) {
-            int odd = count(s, i, i);
-            int even = count(s, i, i + 1);
-            res += odd + even;
+            calc(res, i, i, s);
+            calc(res, i, i + 1, s);
         }
         
         return res;
     }
-
-    int count(string &s, int left, int right) {
-        int res = 0;
-
-        while (left >= 0 && right < s.size() && s[left] == s[right]) {
-            res++;
-            left--;
-            right++;
-        }
-        
-        return res;
-    }
-
 };
