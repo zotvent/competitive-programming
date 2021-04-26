@@ -1,63 +1,44 @@
 class Solution {
     
-    double backtrack(unordered_map<string, unordered_map<string, double>>& g, string& cur, string& target, double product, unordered_set<string>& visited) {
-        visited.insert(cur);
-        double res = -1;
-        
-        if (g[cur].count(target) > 0) {
-            res = product * g[cur][target];
+    double backtrack(unordered_map<string, unordered_map<string, double>>& g, string cur, string dest, unordered_set<string>& used, double product) {
+        if (cur == dest) {
+            return product;
         }
-        else {
-            string to;
-            double weight;
-            
-            for (auto it = g[cur].begin(); it != g[cur].end(); it++) {
-                to = it->first;
-                weight = it->second;
-                
-                if (visited.count(to) > 0) {
-                    continue;
-                }
-                else {
-                    res = backtrack(g, to, target, product * weight, visited);
-                    
-                    if (res != -1) {
-                        break;
-                    }
+        
+        used.insert(cur);
+        double next;
+        
+        for (auto it = g[cur].begin(); it != g[cur].end(); it++) {
+            if (used.count(it->first) == 0) {
+                next = backtrack(g, it->first, dest, used, product * it->second);
+                if (next != -1.0) {
+                    used.erase(cur);
+                    return next;
                 }
             }
         }
         
-        visited.erase(cur);
-        return res;
+        used.erase(cur);
+        return -1;
     }
     
 public:
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        vector<double> res(queries.size(), -1);
+        vector<double> res;
         unordered_map<string, unordered_map<string, double>> g;
-        unordered_set<string> visited;
-        string from, to;
+        unordered_set<string> used;
         
         for (int i = 0; i < equations.size(); i++) {
-            from = equations[i][0];
-            to = equations[i][1];
-            g[from][to] = values[i];
-            g[to][from] = 1.0 / values[i];
+            g[equations[i][0]][equations[i][1]] = values[i];
+            g[equations[i][1]][equations[i][0]] = 1 / values[i];
         }
         
-        for (int i = 0; i < queries.size(); i++) {
-            from = queries[i][0];
-            to = queries[i][1];
-            
-            if (g.count(from) == 0 || g.count(to) == 0) {
-                res[i] = -1;
-            }
-            else if (from == to) {
-                res[i] = 1;
+        for (auto& q: queries) {
+            if (g.count(q[0]) == 0 || g.count(q[1]) == 0) {
+                res.push_back(-1);
             }
             else {
-                res[i] = backtrack(g, from, to, 1, visited);
+                res.push_back(backtrack(g, q[0], q[1], used, 1));
             }
         }
         

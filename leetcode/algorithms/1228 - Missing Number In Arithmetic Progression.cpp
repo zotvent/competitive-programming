@@ -1,12 +1,16 @@
 class Solution {
 public:
-    int missingNumber(vector<int>& arr) {        
-        int n = (int) arr.size();
-        int shouldBeSum = (arr[0] + arr.back()) * (n + 1) / 2 ;
-        int realSum = 0;
+    int missingNumber(vector<int>& arr) {
+        int mn = arr[0], mx = arr[0], sum = 0;
         
-        for (auto i: arr) realSum += i;   
+        for (auto& i: arr) {
+            mn = min(mn, i);
+            mx = max(mx, i);
+            sum += i;
+        }
         
-        return shouldBeSum - realSum;
+        int expectedSum = (mn + mx) * (arr.size() + 1) / 2;
+        
+        return expectedSum - sum;
     }
 };

@@ -1,41 +1,57 @@
 class Solution {
+    
+    struct UnionFind {
+        
+        UnionFind(int n) {
+            par.resize(n);
+            size.assign(n, 1);
+            for (int i = 0; i < n; i++) {
+                par[i] = i;
+            }
+        }
+        
+        bool connect(int l, int r) {
+            int left = parent(l);
+            int right = parent(r);
+            
+            if (left == right) {
+                return false;
+            }
+            else if (size[left] > size[right]) {
+                par[right] = left;
+                size[left] += size[right];
+            }
+            else {
+                par[left] = right;
+                size[right] += size[left];
+            }
+            
+            return true;
+        }
+        
+        int parent(int id) {
+            return par[id] == id ? id : par[id] = parent(par[id]);
+        }
+        
+    private:
+        vector<int> par, size;
+    };
+    
 public:
     int makeConnected(int n, vector<vector<int>>& connections) {
         if (connections.size() < n - 1) {
             return -1;
         }
         
-        int groups = 0;
+        UnionFind uf(n);
+        int groups = n;
         
-        vector<vector<int>> g;
-        g.resize(n);
-        vector<int> used(n, 0);
-                
-        for (int i = 0; i < connections.size(); i++) {
-            g[connections[i][0]].push_back(connections[i][1]);
-            g[connections[i][1]].push_back(connections[i][0]);
-        }
-        
-        for (int i = 0; i < n; i++) {
-            if (!used[i]) {
-                dfs(g, used, i);
-                groups++;
+        for (auto& i: connections) {
+            if (uf.connect(i[0], i[1])) {
+                groups--;
             }
         }
         
         return groups - 1;
-    }
-    
-    void dfs(vector<vector<int>>& g, vector<int>& used, int v) {
-        used[v] = 1;
-        
-        int to;
-        for (int i = 0; i < g[v].size(); i++) {
-            to = g[v][i];
-            
-            if (!used[to]) {
-                dfs(g, used, to);
-            }
-        }
     }
 };
