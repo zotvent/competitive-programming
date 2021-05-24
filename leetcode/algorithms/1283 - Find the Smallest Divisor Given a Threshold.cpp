@@ -1,16 +1,14 @@
 class Solution {
 public:
     int smallestDivisor(vector<int>& nums, int threshold) {        
-        int l = 1;
-        int r = (int) 1e6;
-        int m, sum;
+        int l = 1, r = (int) 1e6, m, sum;
         
         while (l < r) {
             m = l + (r - l) / 2;
             sum = 0;
             
-            for (int i = 0; i < nums.size(); i++) {
-                sum += (nums[i] + m - 1) / m;
+            for (auto& i: nums) {
+                sum += (i + m - 1) / m;
             }
             
             if (sum > threshold) l = m + 1;

@@ -2,32 +2,25 @@ class Solution {
 public:
     string minRemoveToMakeValid(string s) {
         string res = "";
-        stack<int> brackets;
-        unordered_set<int> indexesToRemove;
+        vector<int> open, close;
+        int l = 0, r = 0;
         
         for (int i = 0; i < s.size(); i++) {
-            if (s[i] == '(') {
-                brackets.push(i);
-            }
+            if (s[i] == '(') open.push_back(i);
             else if (s[i] == ')') {
-                if (brackets.empty()) {
-                    indexesToRemove.insert(i);
-                }
-                else {
-                    brackets.pop();
-                }
+                if (!open.empty()) open.pop_back();
+                else close.push_back(i);
             }
-        }
-        
-        while (!brackets.empty()) {
-            indexesToRemove.insert(brackets.top());
-            brackets.pop();
         }
         
         for (int i = 0; i < s.size(); i++) {
-            if (indexesToRemove.count(i) == 0) {
-                res.push_back(s[i]);
+            if (l < open.size() && open[l] == i) {
+                l++;
             }
+            else if (r < close.size() && close[r] == i) {
+                r++;
+            }
+            else res.push_back(s[i]);
         }
         
         return res;

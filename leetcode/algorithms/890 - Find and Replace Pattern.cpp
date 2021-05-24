@@ -1,28 +1,35 @@
 class Solution {
-public:
-    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
-        vector<string> v;
+    
+    bool match(string& word, string& pattern) {
+        vector<int> m(26, -1), rev(26, -1);
+        int key, value;
         
-        for (int i = 0; i < words.size(); i++) {
-            bool ok = true;
-            map<char, set<char>> forward, reverse;
+        for (int i = 0; i < word.size(); i++) {
+            key = pattern[i] - 'a';
+            value = word[i] - 'a';
             
-            for (int j = 0; j < words[i].length(); j++) {
-                char key = words[i][j];
-                char value = pattern[j];
-                
-                forward[key].insert(value);
-                reverse[value].insert(key);
+            if (m[key] == -1 && rev[value] == -1) {
+                m[key] = value;
+                rev[value] = key;
             }
-            
-            for (auto i = forward.begin(); i != forward.end(); i++)
-                if (i->second.size() > 1) ok = false;
-            for (auto i = reverse.begin(); i != reverse.end(); i++)
-                if (i->second.size() > 1) ok = false;
-            
-            if (ok) v.push_back(words[i]);
+            else if (m[key] != value || rev[value] != key) {
+                return false;
+            }
         }
         
-        return v;
+        return true;
+    }
+    
+public:
+    vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
+        vector<string> res;
+        
+        for (auto& i: words) {
+            if (match(i, pattern)) {
+                res.push_back(i);
+            }
+        }
+        
+        return res;
     }
 };
