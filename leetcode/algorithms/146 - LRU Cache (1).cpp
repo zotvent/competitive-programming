@@ -1,4 +1,5 @@
 class LRUCache {
+
     int size, time;
     unordered_map<int, pair<int, int>> byKey; // key -> (value, time)
     map<int, int> byTime; // time -> key
