@@ -1,43 +1,28 @@
 class Solution {
-public:
-    int maxAreaOfIsland(vector<vector<int>>& grid) {
-        vector<vector<int>> used(grid.size(), vector<int>(grid[0].size(), 0));
-        int res = 0;
-        
-        for (int i = 0; i < grid.size(); i++)
-            for (int j = 0; j < grid[i].size(); j++)
-                if (!used[i][j] && grid[i][j]) {
-                    int temp = bfs(i, j, grid, used);
-                    res = max(res, temp);
-                }
-        
-        return res;
-    }
     
-    int bfs(int row, int col, vector<vector<int>>& grid, vector<vector<int>>& used) {
-        int res = 1;
+    int bfs(vector<vector<int>>& grid, vector<vector<int>>& used, int row, int col) {
+        int res = 0, r, c;
+        const int rows = grid.size();
+        const int cols = grid[0].size();
+        queue<vector<int>> q;
+        vector<int> cur;
+        const vector<vector<int>> d = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
         
-        queue<pair<int, int>> q;
-        q.push(make_pair(row, col));
+        q.push({row, col});
         used[row][col] = 1;
         
-        vector<int> dx = {0, 0, 1, -1};
-        vector<int> dy = {1, -1, 0, 0};
-        
         while (!q.empty()) {
-            pair<int, int> v = q.front();
+            res++;
+            cur = q.front();
             q.pop();
             
-            for (int i = 0; i < 4; i++) {
-                int x = v.first + dx[i];
-                int y = v.second + dy[i];
+            for (int i = 0; i < d.size(); i++) {
+                r = cur[0] + d[i][0];
+                c = cur[1] + d[i][1];
                 
-                if (valid(x, y, grid)) {
-                    if (grid[x][y] && !used[x][y]) {
-                        res++;
-                        used[x][y] = 1;
-                        q.push(make_pair(x, y));
-                    }
+                if (valid(r, c, rows, cols) && !used[r][c] && grid[r][c] == 1) {
+                    used[r][c] = 1;
+                    q.push({r, c});
                 }
             }
         }
@@ -45,7 +30,26 @@ public:
         return res;
     }
     
-    bool valid(int x, int y, vector<vector<int>>& grid) {
-        return x >= 0 && y >= 0 && x < grid.size() && y < grid[0].size();
+    bool valid(int row, int col, int rows, int cols) {
+        return row >= 0 && col >= 0 && row < rows && col < cols;
+    }
+    
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int res = 0, area;
+        const int rows = grid.size();
+        const int cols = grid[0].size();
+        vector<vector<int>> used(rows, vector<int>(cols, 0));
+        
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (!used[i][j] && grid[i][j] == 1) {
+                    area = bfs(grid, used, i, j);
+                    res = max(res, area);
+                }
+            }
+        }
+        
+        return res;
     }
 };
