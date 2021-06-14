@@ -11,30 +11,23 @@
  */
 class Solution {
     
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& in, int& head, int left, int right) {
-        if (left > right) {
-            return NULL;
-        }
+    TreeNode* buildTree(int& head, vector<int>& preorder, unordered_map<int, int>& in, int l, int r) {
+        if (l > r) return NULL;
         
-        TreeNode* root = new TreeNode(preorder[head]);
-        int rootIndex = in[preorder[head++]];
-        
-        root->left = buildTree(preorder, inorder, in, head, left, rootIndex - 1);
-        root->right = buildTree(preorder, inorder, in, head, rootIndex + 1, right);
-        
-        return root;
+        TreeNode* res = new TreeNode(preorder[head]);
+        int m = in[preorder[head++]];
+        res->left = buildTree(head, preorder, in, l, m - 1);
+        res->right = buildTree(head, preorder, in, m + 1, r);
+        return res; 
     }
     
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        unordered_map<int, int> in;
         int head = 0;
-        const int n = inorder.size();
-        
-        for (int i = 0; i < n; i++) {
+        unordered_map<int, int> in;
+        for (int i = 0; i < inorder.size(); i++) {
             in[inorder[i]] = i;
         }
-        
-        return buildTree(preorder, inorder, in, head, 0, n - 1);
+        return buildTree(head, preorder, in, 0, inorder.size() - 1);
     }
 };

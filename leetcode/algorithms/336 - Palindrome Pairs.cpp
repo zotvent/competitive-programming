@@ -1,87 +1,77 @@
 class Solution {
     
-    struct TrieNode {
-        unordered_map<char, TrieNode*> next;
-        int wordIndex;
+    struct Trie {
+        int wordId;
+        vector<Trie*> children;
         vector<int> palindromePrefixRemaining;
         
-        TrieNode() {
-            wordIndex = -1;
+        Trie() {
+            wordId = -1;
+            children.resize(26);
         }
     };
     
-    TrieNode* buildTrie(vector<string>& words) {
-        TrieNode* root = new TrieNode();
-        TrieNode* cur;
+    Trie* buildTrie(vector<string>& words) {
+        Trie* root = new Trie();
+        Trie* cur;
+        string word;
         
-        string reversedWord;
-        
-        for (int wordId = 0; wordId < words.size(); wordId++) {
+        for (int i = 0; i < words.size(); i++) {
+            word = words[i];
+            reverse(word.begin(), word.end());
             cur = root;
-            reversedWord = words[wordId];
-            reverse(reversedWord.begin(), reversedWord.end());
             
-            for (int j = 0; j < reversedWord.size(); j++) {
-                if (hasPalindromeRemaining(reversedWord, j)) {
-                    cur->palindromePrefixRemaining.push_back(wordId);
+            for (int j = 0; j < word.size(); j++) {
+                if (hasPalindromeRemaining(word, j)) {
+                    cur->palindromePrefixRemaining.push_back(i);
                 }
                 
-                if (!cur->next[reversedWord[j]]) {
-                    cur->next[reversedWord[j]] = new TrieNode();
+                if (!cur->children[word[j] - 'a']) {
+                    cur->children[word[j] - 'a'] = new Trie();
                 }
-                cur = cur->next[reversedWord[j]];
+                cur = cur->children[word[j] - 'a'];
             }
-            
-            cur->wordIndex = wordId;
+            cur->wordId = i;
         }
         
         return root;
     }
     
-    bool hasPalindromeRemaining(string& word, int start) {
-        int head = start;
-        int tail = word.size() - 1;
-        
-        while (head < tail) {
-            if (word[head] != word[tail]) {
+    bool hasPalindromeRemaining(string& s, int start) {
+        int end = s.length() - 1;
+        while (start < end) {
+            if (s[start++] != s[end--]) {
                 return false;
             }
-            
-            head++;
-            tail--;
         }
-        
         return true;
     }
     
 public:
     vector<vector<int>> palindromePairs(vector<string>& words) {
         vector<vector<int>> res;
+        Trie* root = buildTrie(words);
+        Trie* cur;
         
-        TrieNode* root = buildTrie(words);
-        TrieNode* cur;
-        
-        for (int wordId = 0; wordId < words.size(); wordId++) {
+        for (int i = 0; i < words.size(); i++) {
             cur = root;
             
-            for (int j = 0; j < words[wordId].size(); j++) {
-                if (cur->wordIndex != -1 && hasPalindromeRemaining(words[wordId], j)) {
-                    res.push_back({wordId, cur->wordIndex});
+            for (int j = 0; j < words[i].size(); j++) {
+                if (cur->wordId != -1 && hasPalindromeRemaining(words[i], j)) {
+                    res.push_back({i, cur->wordId});
                 }
-                
-                cur = cur->next[words[wordId][j]];
-                
+                cur = cur->children[words[i][j] - 'a'];
                 if (!cur) break;
             }
             
             if (!cur) continue;
             
-            if (cur->wordIndex != -1 && cur->wordIndex != wordId) {
-                res.push_back({wordId, cur->wordIndex});
+            if (cur->wordId != -1 && cur->wordId != i) {
+                res.push_back({i, cur->wordId});
             }
             
-            for (auto& other: cur->palindromePrefixRemaining) {
-                res.push_back({wordId, other});
+            for (auto& index: cur->palindromePrefixRemaining) {
+                res.push_back({i, index});
             }
         }
         
