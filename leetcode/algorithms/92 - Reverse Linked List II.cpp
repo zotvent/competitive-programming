@@ -13,7 +13,6 @@ public:
     ListNode* reverseBetween(ListNode* head, int left, int right) {
         ListNode* res = new ListNode(0);
         res->next = head;
-        
         ListNode* prev = res;
         
         for (int i = 0; i < left - 1; i++) {
