@@ -1,12 +1,12 @@
 class MyQueue {
-private:
-    stack<int> head;
-    stack<int> tail;
+    stack<int> front, back;
     
     void rebalance() {
-        while (!tail.empty()) {
-            head.push(tail.top());
-            tail.pop();
+        if (front.empty()) {
+            while (!back.empty()) {
+                front.push(back.top());
+                back.pop();
+            }
         }
     }
     
@@ -18,25 +18,26 @@ public:
     
     /** Push element x to the back of queue. */
     void push(int x) {
-        tail.push(x);
+        back.push(x);
     }
     
     /** Removes the element from in front of queue and returns that element. */
     int pop() {
-        int res = peek();
-        head.pop();
-        return res;
+        rebalance();
+        int value = front.top();
+        front.pop();
+        return value;
     }
     
     /** Get the front element. */
     int peek() {
-        if (head.empty()) rebalance();
-        return head.top();
+        rebalance();
+        return front.top();
     }
     
     /** Returns whether the queue is empty. */
     bool empty() {
-        return head.empty() && tail.empty();
+        return front.empty() && back.empty();
     }
 };
 
