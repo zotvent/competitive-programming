@@ -1,8 +1,6 @@
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        vector<vector<int>> res;
-        
         set<vector<int>> s;
         vector<int> v;
         int l, r, sum;
@@ -38,8 +36,6 @@ public:
             }
         }
         
-        for (auto it = s.begin(); it != s.end(); ++it) res.push_back(*it);
-        
-        return res;
+        return vector<vector<int>>(s.begin(), s.end());
     }
 };

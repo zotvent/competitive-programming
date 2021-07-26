@@ -4,22 +4,22 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     TreeNode* pruneTree(TreeNode* root) {
-        if (root) {
-            root->left = pruneTree(root->left);
-            root->right = pruneTree(root->right);
-
-            if (root->left == NULL && root->right == NULL && root->val == 0)
-                return NULL;
-            else     
-                return root;
-        }
+        if (!root) return root;
         
+        root->left = pruneTree(root->left);
+        root->right = pruneTree(root->right);
+        
+        if (!root->left && !root->right && root->val != 1) {
+            return NULL;
+        }
         return root;
     }
 };

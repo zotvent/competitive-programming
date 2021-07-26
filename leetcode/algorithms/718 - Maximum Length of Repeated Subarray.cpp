@@ -9,8 +9,8 @@ public:
             for (int j = m - 1; j >= 0; j--) {
                 if (nums1[i] == nums2[j]) {
                     dp[i][j] = dp[i + 1][j + 1] + 1;
+                    res = max(res, dp[i][j]);
                 }
-                res = max(res, dp[i][j]);
             }
         }
         

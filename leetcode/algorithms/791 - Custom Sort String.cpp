@@ -1,21 +1,32 @@
 class Solution {
+    
+    int charToInt(int c) {
+        return c - 'a';
+    }
+    
 public:
-    string customSortString(string S, string T) {
+    string customSortString(string order, string str) {
         string res = "";
-        vector<int> v(26, 0);
-        int i, j;
-
-        for (i = 0; i < T.size(); i++)
-            v[T[i] - 'a']++;
-        for (i = 0; i < S.size(); i++) {
-            for (j = 0; j < v[S[i] - 'a']; j++)
-                res += S[i];
-            v[S[i] - 'a'] = 0;
+        vector<int> m(26, 0); // frequency
+        
+        for (auto& i: str) {
+            m[charToInt(i)]++;
         }
-        for (i = 0; i < 26; i++)
-            for (j = 0; j < v[i]; j++)
-                res += i + 'a';
-
+        
+        for (auto& i: order) {
+            for (int j = 0; j < m[charToInt(i)]; j++) {
+                res.push_back(i);
+            }
+            m[charToInt(i)] = 0;
+        }
+        
+        for (auto& i: str) {
+            for (int j = 0; j < m[charToInt(i)]; j++) {
+                res.push_back(i);
+            }
+            m[charToInt(i)] = 0;
+        }
+        
         return res;
     }
 };
