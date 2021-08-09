@@ -9,37 +9,38 @@
  * };
  */
 class Solution {
-public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* res = new ListNode();
-        ListNode* cur = res;
-        const int n = lists.size();
-        unordered_map<int, ListNode*> m;
-        int index;
+    
+    priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> preprocess(vector<ListNode*>& lists) {
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> res;
         
-        for (int i = 0; i < n; i++) {
-            if (lists[i]) {
-                m[i] = lists[i];
+        for (auto& i: lists) {
+            if (i) {
+                res.push({i->val, i});
             }
         }
         
-        while (!m.empty()) {
-            index = -1;
+        return res;
+    }
+    
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* res = new ListNode(0);
+        ListNode* head = res;
+        ListNode* next;
+        
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> mins = preprocess(lists);
+        pair<int, ListNode*> cur;
+        
+        while (!mins.empty()) {
+            cur = mins.top();
+            mins.pop();
             
-            for (auto it = m.begin(); it != m.end(); it++) {
-                if (index == -1 || (it->second)->val < m[index]->val) {
-                    index = it->first;
-                }
+            head->next = cur.second;
+            next = cur.second->next;
+            if (next) {
+                mins.push({next->val, next});
             }
-            
-            cur->next = m[index];
-            cur = cur->next;
-            
-            m[index] = m[index]->next;
-            
-            if (!m[index]) {
-                m.erase(index);
-            }
+            head = head->next;
         }
         
         return res->next;
