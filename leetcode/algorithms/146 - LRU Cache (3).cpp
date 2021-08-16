@@ -2,7 +2,6 @@ class LRUCache {
     
     unordered_map<int, list<pair<int, int>>::iterator> m;
     list<pair<int, int>> nums; // (key, value)
-    list<pair<int, int>>::iterator it;
     int size;
     
 public:
@@ -11,36 +10,23 @@ public:
     }
     
     int get(int key) {
-        if (m.count(key) > 0) {
-            it = m[key];
-            int value = (*it).second;
-            
-            nums.erase(it);
-            nums.push_back({key, value});
-            it = nums.end();
-            it--;
-            m[key] = it;
-            
-            return value;
-        }
-        return -1;
+        if (m.count(key) == 0) return -1;
+        int value = (*m[key]).second;
+        put(key, value);
+        return value;
     }
     
     void put(int key, int value) {
         if (m.count(key) > 0) {
-            it = m[key];
-            nums.erase(it);
+            nums.erase(m[key]);
         }
         else if (m.size() == size) {
-            it = nums.begin();
-            m.erase((*it).first);
-            nums.pop_front();
+            m.erase(nums.back().first);
+            nums.pop_back();
         }
         
-        nums.push_back({key, value});
-        it = nums.end();
-        it--;
-        m[key] = it;
+        nums.push_front({key, value});
+        m[key] = nums.begin();
     }
 };
 
