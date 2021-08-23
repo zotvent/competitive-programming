@@ -1,25 +1,18 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        vector<unordered_map<char, int>> rows(9);
-        vector<unordered_map<char, int>> cols(9);
-        vector<unordered_map<char, int>> boxes(9);
+        vector<unordered_map<int, int>> rows(9), cols(9), boxes(9);
         
-        char c;
-        int box;
-        
-        for (int row = 0; row < board.size(); row++) {
-            for (int col = 0; col < board[row].size(); col++) {
-                c = board[row][col];
-                
-                if (c != '.') {
-                    box = (row / 3) * 3 + col / 3;
+        for (int r = 0; r < board.size(); r++) {
+            for (int c = 0; c < board[r].size(); c++) {
+                if (board[r][c] != '.') {
+                    int digit = board[r][c] - '0';
+                    int box = (r / 3) * 3 + c / 3;
+                    rows[r][digit]++;
+                    cols[c][digit]++;
+                    boxes[box][digit]++;
                     
-                    rows[row][c]++;
-                    cols[col][c]++;
-                    boxes[box][c]++;
-                    
-                    if (rows[row][c] > 1 || cols[col][c] > 1 || boxes[box][c] > 1) {
+                    if (rows[r][digit] > 1 || cols[c][digit] > 1 || boxes[box][digit] > 1) {
                         return false;
                     }
                 }

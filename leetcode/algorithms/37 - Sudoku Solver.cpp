@@ -1,78 +1,69 @@
 class Solution {
     
-    vector<unordered_set<int>> rows, cols, squares;
-    vector<pair<int, int>> candidates;
+    const int size = 9;
+    vector<unordered_set<int>> rows, cols, boxes;
     
-    bool backtrack(vector<vector<char>>& board) {
-        if (candidates.empty()) {
+    int boxIndex(int row, int col) {
+        return (row / 3) * 3 + col / 3;
+    }
+    
+    void add(int row, int col, int digit) {
+        rows[row].insert(digit);
+        cols[col].insert(digit);
+        boxes[boxIndex(row, col)].insert(digit);
+    }
+    
+    void remove(int row, int col, int digit, vector<unordered_set<int>>& rows, vector<unordered_set<int>>& cols, vector<unordered_set<int>>& boxes) {
+        rows[row].erase(digit);
+        cols[col].erase(digit);
+        boxes[boxIndex(row, col)].erase(digit);
+    }
+    
+    bool valid(int row, int col, int digit) {
+        return rows[row].count(digit) == 0 && cols[col].count(digit) == 0 && boxes[boxIndex(row, col)].count(digit) == 0;
+    }
+    
+    bool next(vector<vector<char>>& board, int row, int col) {
+        if (row == size - 1 && col == size - 1) {
             return true;
         }
         
-        pair<int, int> coordinates = candidates.back();
-        int row = coordinates.first;
-        int col = coordinates.second;
-        
-        candidates.pop_back();
-        
-        for (int i = 1; i <= 9; i++) {
-            if (valid(row, col, i)) {
-                placeCandidate(row, col, i, board);
-                
-                if (backtrack(board)) {
-                    return true;
-                }
-                
-                removeCandidate(row, col, i, board);
-            }
+        if (col < size - 1) return backtrack(board, row, col + 1);
+        else return backtrack(board, row + 1, 0);
+    }
+    
+    bool backtrack(vector<vector<char>>& board, int row, int col) {
+        if (board[row][col] != '.') {
+            return next(board, row, col);
         }
         
-        candidates.push_back(coordinates);
+        for (int i = 1; i <= size; i++) {
+            if (valid(row, col, i)) {
+                add(row, col, i);
+                board[row][col] = i + '0';
+                if (next(board, row, col)) return true;
+                board[row][col] = '.';
+                remove(row, col, i, rows, cols, boxes);
+            }
+        }
         
         return false;
     }
     
-    bool valid(int row, int col, int value) {
-        int inRow = rows[row].count(value);
-        int inCol = cols[col].count(value);
-        int inSquare = squares[(row / 3) * 3 + col / 3].count(value);
-        int sum = inRow + inCol + inSquare;
-        
-        return sum == 0;
-    }
-    
-    void placeCandidate(int row, int col, int value, vector<vector<char>>& board) {
-        rows[row].insert(value);
-        cols[col].insert(value);
-        squares[(row / 3) * 3 + col / 3].insert(value);
-        board[row][col] = value + '0';
-    }
-    
-    void removeCandidate(int row, int col, int value, vector<vector<char>>& board) {
-        rows[row].erase(value);
-        cols[col].erase(value);
-        squares[(row / 3) * 3 + col / 3].erase(value);
-        board[row][col] = '.';
-    }
-    
 public:
     void solveSudoku(vector<vector<char>>& board) {
-        rows.resize(9);
-        cols.resize(9);
-        squares.resize(9);
+        rows.resize(size);
+        cols.resize(size);
+        boxes.resize(size);
         
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board[i].size(); j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (board[i][j] != '.') {
-                    rows[i].insert(board[i][j] - '0');
-                    cols[j].insert(board[i][j] - '0');
-                    squares[(i/3) * 3 + j / 3].insert(board[i][j] - '0');
-                }
-                else {
-                    candidates.push_back({i, j});
+                    add(i, j, board[i][j] - '0');
                 }
             }
         }
         
-        backtrack(board);
+        backtrack(board, 0, 0);
     }
 };

@@ -11,19 +11,19 @@
  */
 class Solution {
     
-    bool dfs(TreeNode* root, int target, unordered_set<int>& seen) {
-        if (!root) return false;
+    void dfs(TreeNode* root, int& res, int mx) {
+        if (!root) return;
         
-        if (dfs(root->left, target, seen) || seen.count(target - root->val) > 0) {
-            return true;
-        }
-        seen.insert(root->val);
-        return dfs(root->right, target, seen);
+        if (root->val >= mx) res++;
+        mx = max(root->val, mx);
+        dfs(root->left, res, mx);
+        dfs(root->right, res, mx);
     }
     
 public:
-    bool findTarget(TreeNode* root, int k) {
-        unordered_set<int> seen;
-        return dfs(root, k, seen);
+    int goodNodes(TreeNode* root) {
+        int res = 0;
+        dfs(root, res, INT_MIN);
+        return res;
     }
 };
