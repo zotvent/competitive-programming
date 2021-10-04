@@ -1,26 +1,37 @@
 class Solution {
-public:
-    int numUniqueEmails(vector<string>& emails) {
-        unordered_set<string> s;
+    
+    string toKey(string& email) {
+        int index = 0;
         
-        for (int i = 0; i < emails.size(); i++) {
-            string tmp;
-            bool foundPlus = false;
-            bool foundAt = false;
-            
-            for (int j = 0; j < emails[i].size(); j++) {
-                char c = emails[i][j];
-                
-                if (c == '@') foundAt = true;
-                else if (c == '+') foundPlus = true;
-                
-                if (foundAt) tmp += c;
-                else if (!foundPlus && c != '.') tmp += c;
-            }
-                
-            s.insert(tmp);
+        while (index < email.size() && email[index] != '@') {
+            index++;
         }
         
-        return s.size();
+        string domain = email.substr(index + 1);
+        string name = "";
+        
+        for (int i = 0; i < index && email[i] != '+'; i++) {
+            if (email[i] != '.') {
+                name.push_back(email[i]);
+            }
+        }
+        
+        string key = name;
+        key.push_back('@');
+        key += domain;
+        
+        return key;
+    }
+    
+public:
+    int numUniqueEmails(vector<string>& emails) {
+        unordered_set<string> res;
+        
+        for (auto& i: emails) {
+            auto email = toKey(i);
+            res.insert(email);
+        }
+        
+        return res.size();
     }
 };

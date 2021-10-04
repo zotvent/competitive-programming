@@ -1,22 +1,18 @@
 class Solution {
 public:
-    string breakPalindrome(string palindrome) {        
-        int sz = (int) palindrome.size();
-        bool found = false;
-        bool odd = (sz % 2 == 1);
+    string breakPalindrome(string palindrome) {
+        const int n = palindrome.size();
+        if (n < 2) return "";
         
-        for (int i = 0; i < sz; i++) {
-            if (palindrome[i] != 'a' && (!odd || i != sz / 2)) {
+        for (int i = 0; i < n / 2; i++) {
+            if (palindrome[i] != 'a') {
                 palindrome[i] = 'a';
-                found = true;
-                break;
+                return palindrome;
             }
         }
         
-        if (!found) {
-            palindrome[sz - 1] = 'b';
-        }
-        
-        return (sz < 2 ? "" : palindrome);
+        char old = palindrome[n - 1];
+        palindrome[n - 1] = (((old - 'a') + 1) % 26) + 'a';
+        return palindrome;
     }
 };
