@@ -2,7 +2,6 @@ class Solution {
 public:
     string frequencySort(string s) {
         string res = "";
-        
         unordered_map<char, int> m;
         
         for (auto& c: s) {

@@ -10,26 +10,24 @@
  * };
  */
 class Solution {
-public:
-    bool isCousins(TreeNode* root, int x, int y) {
-        pair<int, int> left = {-2, -2}; // depth, parent
-        pair<int, int> right = {-3, -3}; // depth, parent
-        
-        dfs(root, x, 0, 0, left);
-        dfs(root, y, 0, -1, right);
-        
-        return left.first == right.first && left.second != right.second;
-    }
     
-    void dfs(TreeNode* root, int x, int h, int p, pair<int, int>& res) {
-        if (!root) return;
+    pair<TreeNode*, int> dfs(TreeNode* root, TreeNode* parent, int val, int height) {
+        if (!root) return {NULL, height};
         
-        if (root->val == x) {
-            res = {h, p};
-            return;
+        if (root->val == val) {
+            return {parent, height};
         }
         
-        dfs(root->left, x, h + 1, root->val, res);
-        dfs(root->right, x, h + 1, root->val, res);
+        auto left = dfs(root->left, root, val, height + 1);
+        
+        if (left.first) return left;
+        else return dfs(root->right, root, val, height + 1);
+    }
+    
+public:
+    bool isCousins(TreeNode* root, int x, int y) {
+        auto X = dfs(root, NULL, x, 0);
+        auto Y = dfs(root, NULL, y, 0);
+        return X.second == Y.second && X.first != Y.first;
     }
 };

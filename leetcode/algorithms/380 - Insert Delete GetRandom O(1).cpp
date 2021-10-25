@@ -28,8 +28,9 @@ public:
         }
         
         int last = nums.back();
-        m[last] = m[val];
-        nums[m[val]] = last;
+        int index = m[val];
+        m[last] = index;
+        nums[index] = last;
         nums.pop_back();
         m.erase(val);
         
