@@ -1,19 +1,15 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        unordered_set<int> s;
+        unordered_set<int> seen;
         
         for (auto& i: nums) {
-            if (s.count(i) > 0) {
-                s.erase(i);
+            if (seen.count(i) > 0) {
+                seen.erase(i);
             }
-            else {
-                s.insert(i);
-            }
+            else seen.insert(i);
         }
         
-        vector<int> res(s.begin(), s.end());
-        
-        return res;
+        return vector<int>(seen.begin(), seen.end());
     }
 };
