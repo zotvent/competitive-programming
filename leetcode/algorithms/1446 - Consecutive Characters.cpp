@@ -1,18 +1,12 @@
 class Solution {
 public:
     int maxPower(string s) {
-        int res = 1;
-        int cur = 1;
-        const int n = s.size();
+        int res = 1, cur = 1;
         
-        for (int i = 1; i <= n; i++) {
-            if (i == n || s[i] != s[i - 1]) {
-                res = max(res, cur);
-                cur = 1;
-            }
-            else {
-                cur++;
-            }
+        for (int i = 1; i < s.size(); i++) {
+            if (s[i] == s[i - 1]) cur++;
+            else cur = 1;
+            res = max(res, cur);
         }
         
         return res;

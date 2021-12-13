@@ -12,13 +12,10 @@
 class Solution {
     
     int dfs(TreeNode* root, int& res) {
-        if (!root) {
-            return 0;
-        }
+        if (!root) return 0;
         
         int left = dfs(root->left, res);
         int right = dfs(root->right, res);
-        
         res += abs(left - right);
         
         return root->val + left + right;
