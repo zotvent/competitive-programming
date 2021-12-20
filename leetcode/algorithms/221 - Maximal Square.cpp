@@ -2,10 +2,8 @@ class Solution {
 public:
     int maximalSquare(vector<vector<char>>& matrix) {
         int res = 0;
-
-        int n = matrix.size();
-        int m = matrix.empty() ? 0 : matrix[0].size();
-
+        const int n = matrix.size();
+        const int m = matrix[0].size();
         vector<vector<int>> dp(n, vector<int>(m, 0));
 
         for (int i = 0; i < n; i++) {
