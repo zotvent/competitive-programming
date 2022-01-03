@@ -3,27 +3,22 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        int size = dfsCount(head);
-        return dfs(head, size / 2);
-    }
-
-    int dfsCount(ListNode* head) {
-        int res = 0;
-        while (head) {
-            res++;
-            head = head->next;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
-        return res;
-    }
-
-    ListNode* dfs(ListNode* head, int left) {
-        if (!left) return head;
-        return dfs(head->next, left - 1);
+        
+        return slow;
     }
 };
