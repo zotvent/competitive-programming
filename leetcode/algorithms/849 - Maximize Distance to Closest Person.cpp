@@ -1,27 +1,32 @@
 class Solution {
 public:
     int maxDistToClosest(vector<int>& seats) {
-        int res = 0;
-        int cur = 0;
-        bool foundPerson = false;
+        int res = 0, empty;
+        const int n = seats.size();
         
-        for (auto& i: seats) {
-            if (i == 1) {
-                if (!foundPerson) {
-                    res = max(res, cur);
-                }
-                else {
-                    res = max(res, (cur - 1) / 2 + 1);
-                }
-                
-                foundPerson = true;
-                cur = 0;
+        for (int i = 0; i < n; i++) {
+            if (seats[i] == 1) {
+                empty = 0;
             }
             else {
-                cur++;
+                res = max(res, (++empty + 1) / 2);
             }
         }
         
-        return max(res, cur);
+        for (int i = 0; i < n; ++i) {
+            if (seats[i] == 1) {
+                res = max(res, i);
+                break;
+            }
+        }
+
+        for (int i = n - 1; i >= 0; --i) {
+            if (seats[i] == 1) {
+                res = max(res, n - 1 - i);
+                break;
+            }
+        }
+        
+        return res;
     }
 };

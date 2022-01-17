@@ -1,8 +1,7 @@
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
-        int res = 0;
-        int cur = 0;
+        int res = 0, cur = 0;
         map<int, int> m;
         
         for (auto& i: intervals) {
