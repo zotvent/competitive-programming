@@ -1,19 +1,17 @@
 class Solution {
 public:
-    bool validMountainArray(vector<int>& A) {
-        int l = -1;
-        int r = A.size();
-        
-        int i = 1;
-        while (i < A.size() && A[i - 1] < A[i]) {
-            l = i++;
+    bool validMountainArray(vector<int>& arr) {
+        if (arr.size() < 3) {
+            return false;
         }
         
-        i = (int) A.size() - 2;
-        while (i >= 0 && A[i] > A[i + 1]) {
-            r = i--;
-        }
+        const int n = arr.size();
+        int left = 0;
+        int right = n - 1;
         
-        return l == r;
+        while (left < n - 1 && arr[left] < arr[left + 1]) left++;
+        while (right > 0 && arr[right - 1] > arr[right]) right--;
+        
+        return left == right && left > 0 && right < n - 1;
     }
 };

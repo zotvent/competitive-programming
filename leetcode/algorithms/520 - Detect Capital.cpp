@@ -7,7 +7,6 @@ public:
             if (isupper(word[i])) cnt++;
         }
         
-        if (cnt == word.length() || (cnt == 1 && isupper(word[0])) || cnt == 0) return true;
-        else return false;
+        return cnt == word.length() || (cnt == 1 && isupper(word[0])) || cnt == 0;
     }
 };

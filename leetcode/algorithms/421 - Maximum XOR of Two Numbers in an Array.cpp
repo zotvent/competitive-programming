@@ -10,7 +10,6 @@ class Solution {
     
     TrieNode* buildTrie(vector<int>& nums) {
         TrieNode* root = new TrieNode();
-        
         TrieNode* cur;
         int index;
         
@@ -32,21 +31,18 @@ class Solution {
     }
     
     int helper(TrieNode* root, int num) {
-        int res = 0;
-        
-        int complement;
+        int res = 0, complement;
         
         for (int i = 31; i >= 0; i--) {
             complement = ((num >> i) & 1) ? 0 : 1;
+            res <<= 1;
             
             if (root->children[complement]) {
-                res <<= 1;
                 res |= 1;
                 root = root->children[complement];
             }
             else {
-                res <<= 1;
-                root = root->children[complement ? 0 : 1];
+                root = root->children[!complement];
             }
         }
         
@@ -56,7 +52,6 @@ class Solution {
 public:
     int findMaximumXOR(vector<int>& nums) {
         int res = 0;
-
         TrieNode* root = buildTrie(nums);
         
         for (auto& i: nums) {
