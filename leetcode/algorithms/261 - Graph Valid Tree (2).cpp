@@ -1,6 +1,7 @@
 class Solution {
     
     struct UnionFind {
+        
         UnionFind(int n) {
             sizes.assign(n, 1);
             parents.resize(n);
@@ -10,21 +11,24 @@ class Solution {
             groups = n;
         }
         
+        bool isConnected(int l, int r) {
+            return parent(l) == parent(r);
+        }
+        
         void connect(int l, int r) {
-            int left = parent(l);
-            int right = parent(r);
+            int left = parent(l), right = parent(r);
             
             if (left == right) {
                 return;
             }
             
             if (sizes[left] > sizes[right]) {
-                parents[right] = left;
                 sizes[left] += sizes[right];
+                parents[right] = left;
             }
             else {
-                parents[left] = right;
                 sizes[right] += sizes[left];
+                parents[left] = right;
             }
             groups--;
         }
@@ -46,17 +50,16 @@ class Solution {
     };
     
 public:
-    int earliestAcq(vector<vector<int>>& logs, int n) {
-        UnionFind uf(n);
-        sort(logs.begin(), logs.end());
+    bool validTree(int n, vector<vector<int>>& edges) {
+        UnionFind uf = UnionFind(n);
         
-        for (auto& i: logs) {
-            uf.connect(i[1], i[2]);
-            if (uf.getGroups() == 1) {
-                return i[0];
+        for (auto& e: edges) {
+            if (uf.isConnected(e[0], e[1])) {
+                return false;
             }
+            uf.connect(e[0], e[1]);
         }
         
-        return -1;
+        return uf.getGroups() == 1;
     }
 };

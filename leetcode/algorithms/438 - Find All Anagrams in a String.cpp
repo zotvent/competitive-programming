@@ -1,31 +1,26 @@
 class Solution {
+    
+    vector<int> frequency(string s) {
+        vector<int> res(26, 0);
+        for (auto& i: s) {
+            res[i - 'a']++;
+        }
+        return res;
+    }
+    
 public:
     vector<int> findAnagrams(string s, string p) {
         vector<int> res;
+        const int S = s.size(), P = p.size();
+        vector<int> pattern = frequency(p);
+        vector<int> mapping = frequency(s.substr(0, min(S, P - 1)));
         
-        if (s.size() < p.size()) {
-            return res;
-        }
-        
-        vector<int> pattern(26, 0);
-        vector<int> cur(26, 0);
-        int offset = p.size() - 1;
-        
-        for (auto& c: p) {
-            pattern[c - 'a']++;
-        }
-        for (int i = 0; i < offset; i++) {
-            cur[s[i] - 'a']++;
-        }
-        
-        for (int i = offset; i < s.size(); i++) {
-            cur[s[i] - 'a']++;
-            
-            if (cur == pattern) {
-                res.push_back(i - offset);
+        for (int i = P - 1; i < S; i++) {
+            mapping[s[i] - 'a']++;
+            if (pattern == mapping) {
+                res.push_back(i - P + 1);
             }
-            
-            cur[s[i - offset] - 'a']--;
+            mapping[s[i - P + 1] - 'a']--;
         }
         
         return res;
