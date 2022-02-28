@@ -10,37 +10,37 @@
  */
 class Solution {
     
-    ListNode* merge(ListNode* list1, ListNode* list2) {
-        ListNode dummyHead(0);
-        ListNode* ptr = &dummyHead;
+    ListNode* merge(ListNode* left, ListNode* right) {
+        ListNode* res = new ListNode(0);
+        ListNode* cur = res;
         
-        while (list1 && list2) {
-            if (list1->val < list2->val) {
-                ptr->next = list1;
-                list1 = list1->next;
+        while (left && right) {
+            if (left->val < right->val) {
+                cur->next = left;
+                left = left->next;
             } else {
-                ptr->next = list2;
-                list2 = list2->next;
+                cur->next = right;
+                right = right->next;
             }
-            ptr = ptr->next;
+            cur = cur->next;
         }
         
-        if(list1) ptr->next = list1;
-        else ptr->next = list2;
+        if (left) cur->next = left;
+        else cur->next = right;
 
-        return dummyHead.next;
+        return res->next;
     }
 
     ListNode* getMid(ListNode* head) {
-        ListNode* midPrev = nullptr;
+        ListNode* midPrev = NULL;
         
         while (head && head->next) {
-            midPrev = (midPrev == nullptr) ? head : midPrev->next;
+            midPrev = midPrev ? midPrev->next : head;
             head = head->next->next;
         }
         
         ListNode* mid = midPrev->next;
-        midPrev->next = nullptr;
+        midPrev->next = NULL;
         
         return mid;
     }
