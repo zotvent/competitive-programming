@@ -3,38 +3,30 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
 class Solution {
 public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        ListNode* res = new ListNode(0);
-        ListNode* node = res;
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* res = new ListNode();
+        ListNode* head = res;
         
-        while (l1 || l2) {
-            if (!l1) {
-                node->next = l2;
-                break;
-            }
-            
-            if (!l2) {
-                node->next = l1;
-                break;
-            }
-            
-            if (l1->val < l2->val) {
-                node->next = l1;
-                l1 = l1->next;
+        while (list1 && list2) {
+            if (list1->val < list2->val) {
+                head->next = list1;
+                list1 = list1->next;
             }
             else {
-                node->next = l2;
-                l2 = l2->next;
+                head->next = list2;
+                list2 = list2->next;
             }
             
-            node->next->next = NULL;
-            node = node->next;
+            head = head->next;
         }
+        head->next = list1 ? list1 : list2;
         
         return res->next;
     }

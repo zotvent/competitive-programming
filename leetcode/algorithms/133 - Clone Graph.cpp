@@ -27,13 +27,11 @@ class Solution {
         Node* res = new Node(node->val);
         m[node] = res;
         
-        for (auto& i: node->neighbors) {
-            if (!m.count(i)) {
-                res->neighbors.push_back(dfs(i, m));
+        for (auto& to: node->neighbors) {
+            if (m.count(to) == 0) {
+                dfs(to, m);
             }
-            else {
-                res->neighbors.push_back(m[i]);
-            }
+            res->neighbors.push_back(m[to]);
         }
         
         return res;

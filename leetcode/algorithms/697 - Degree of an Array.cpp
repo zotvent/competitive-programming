@@ -1,22 +1,31 @@
 class Solution {
 public:
     int findShortestSubArray(vector<int>& nums) {
+        unordered_map<int, vector<int>> m; // value -> (count, left, right)
         int degree = 0;
-        map<int, int> m;
-        map<int, pair<int, int>> firstAndLastIndexes;
+        
         for (int i = 0; i < nums.size(); i++) {
-            degree = max(degree, ++m[nums[i]]);
-            if (firstAndLastIndexes.find(nums[i]) == firstAndLastIndexes.end()) 
-                firstAndLastIndexes[nums[i]].first = i;
-            firstAndLastIndexes[nums[i]].second = i;
-        }
-        int res = (int) 1e9;
-        for (auto it = firstAndLastIndexes.begin(); it != firstAndLastIndexes.end(); it++)
-            if (m[it->first] == degree) {
-                int first = it->second.first;
-                int last = it->second.second;
-                res = min(res, last-first+1);
+            int key = nums[i];
+            
+            if (m.count(key) == 0) {
+                m[key] = {1, i, i};
             }
+            else {
+                m[key][0]++;
+                m[key][2] = i;
+            }
+            
+            degree = max(degree, m[key][0]);
+        }
+        
+        int res = nums.size();
+        
+        for (auto& i: m) {
+            if (i.second[0] == degree) {
+                res = min(res, i.second[2] - i.second[1] + 1);
+            }
+        }
+        
         return res;
     }
 };
