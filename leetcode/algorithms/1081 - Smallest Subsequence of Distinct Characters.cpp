@@ -1,38 +1,26 @@
 class Solution {
 public:
     string smallestSubsequence(string s) {
-        unordered_map<char, int> lastOccurence;
-        
-        for (int i = 0; i < s.size(); i++) {
-            lastOccurence[s[i]] = i;
-        }
-        
-        stack<char> st;
-        unordered_set<char> seen;
-        char c;
-        
-        for (int i = 0; i < s.size(); i++) {
-            c = s[i];
-            
-            if (seen.count(c) == 0) {
-                while (!st.empty() && c < st.top() && lastOccurence[st.top()] > i) {
-                    seen.erase(st.top());
-                    st.pop();
-                }
-                
-                st.push(c);
-                seen.insert(c);
-            }
-        }
-        
         string res = "";
+        const int n = 26;
+        vector<int> cnt(n, 0), used(n, 0);
         
-        while (!st.empty()) {
-            res.push_back(st.top());
-            st.pop();
+        for (auto& i: s) {
+            cnt[i - 'a']++;
         }
         
-        reverse(res.begin(), res.end());
+        for (auto& i: s) {
+            cnt[i - 'a']--;
+            if (used[i - 'a']) continue;
+            
+            while (!res.empty() && res.back() > i && cnt[res.back() - 'a'] > 0) {
+                used[res.back() - 'a'] = 0;
+                res.pop_back();
+            }
+            
+            res.push_back(i);
+            used[i - 'a'] = 1;
+        }
         
         return res;
     }

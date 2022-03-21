@@ -1,25 +1,20 @@
 class Solution {
 public:
-    vector<int> partitionLabels(string S) {
-        vector<int> res;
-        
-        const int n = S.size();
-        vector<int> lastIndex(26, -1);
-        int end;
+    vector<int> partitionLabels(string s) {
+        vector<int> res, m(26, -1);
+        const int n = s.size();
+        int last = 0, start = 0;
         
         for (int i = 0; i < n; i++) {
-            lastIndex[S[i] - 'a'] = i;
+            m[s[i] - 'a'] = i;
         }
         
-        for (int start = 0; start < n;) {
-            end = lastIndex[S[start] - 'a'];
-            
-            for (int i = start + 1; i <= end; i++) {
-                end = max(end, lastIndex[S[i] - 'a']);
+        for (int i = 0; i < n; i++) {
+            last = max(last, m[s[i] - 'a']);
+            if (i == last) {
+                res.push_back(i - start + 1);
+                start = i + 1;
             }
-            
-            res.push_back(end - start + 1);
-            start = end + 1;
         }
         
         return res;

@@ -1,24 +1,21 @@
 class Solution {
 public:
-    int scoreOfParentheses(string S) {        
-        stack<int> nums;
-        nums.push(0);
-        
-        int last, prelast;
+    int scoreOfParentheses(string S) {
+        int res = 0, balance = 0;
         
         for (int i = 0; i < S.size(); i++) {
-            if (S[i] == '(') nums.push(0);
+            if (S[i] == '(') {
+                balance++;
+            }
             else {
-                last = nums.top();
-                nums.pop();
+                balance--;
                 
-                prelast = nums.top();
-                nums.pop();
-                
-                nums.push(prelast + max(2 * last, 1));
+                if (i > 0 && S[i - 1] == '(') {
+                    res += (1 << balance);
+                }
             }
         }
         
-        return nums.top();
+        return res;
     }
 };
