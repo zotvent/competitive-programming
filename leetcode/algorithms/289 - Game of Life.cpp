@@ -3,7 +3,6 @@ public:
     void gameOfLife(vector<vector<int>>& board) {        
         int n = board.size();
         int m = (board.empty() ? 0 : board[0].size());
-        
         int live = 0;
         
         // -1 means that cell now dead, but previously was alive

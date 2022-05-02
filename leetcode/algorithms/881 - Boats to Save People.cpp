@@ -15,8 +15,6 @@ public:
             res++;
         }
         
-        res += (l == r);
-        
-        return res;
+        return res + (l == r);
     }
 };
