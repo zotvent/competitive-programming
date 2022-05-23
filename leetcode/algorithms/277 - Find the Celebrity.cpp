@@ -3,28 +3,23 @@
 
 class Solution {
     
-    bool isCelebrity(int i, int n) {
-        for (int j = 0; j < n; j++) {
-            if (i == j) continue;
-            
-            if (knows(i, j) || !knows(j, i)) {
+    bool isCelebrity(int candidate, int n) {
+        for (int i = 0; i < n; i++) {
+            if (i == candidate) continue;
+            if (knows(candidate, i) || !knows(i, candidate)) {
                 return false;
             }
         }
-        
         return true;
     }
     
 public:
     int findCelebrity(int n) {
-        int candidate = 0;
-        
-        for (int i = 1; i < n; i++) {
-            if (knows(candidate, i)) {
-                candidate = i;
+        for (int i = 0; i < n; i++) {
+            if (isCelebrity(i, n)) {
+                return i;
             }
         }
-        
-        return isCelebrity(candidate, n) ? candidate : -1;
+        return -1;
     }
 };
