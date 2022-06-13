@@ -8,18 +8,14 @@ public:
         sum = matrix;
         
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (j > 0) {
-                    sum[i][j] += sum[i][j - 1];
-                }
+            for (int j = 1; j < cols; j++) {
+                sum[i][j] += sum[i][j - 1];
             }
         }
         
         for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
-                if (j > 0) {
-                    sum[j][i] += sum[j - 1][i];
-                }
+            for (int j = 1; j < rows; j++) {
+                sum[j][i] += sum[j - 1][i];
             }
         }
     }
