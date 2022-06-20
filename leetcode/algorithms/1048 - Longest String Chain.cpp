@@ -40,8 +40,8 @@ public:
         }
         
         int res = 0;
-        for (int i = 0; i < n; i++) {
-            res = max(res, dp[i]);
+        for (auto& i: dp) {
+            res = max(res, i);
         }
         return res;
     }
