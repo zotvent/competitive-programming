@@ -1,53 +1,40 @@
 class Solution {
-    
-    vector<string> split(string& str) {
-        vector<string> words;
 
+    vector<string> toWords(string& s) {
+        vector<string> res;
         string word = "";
-        const int n = str.size();
-        
-        for (int i = 0; i <= n; i++) {
-            if (i == n || !isalpha(str[i])) {
-                if (!word.empty()) {
-                    words.push_back(word);
-                }
+        for (auto& i: s) {
+            if (i == ' ') {
+                res.push_back(word);
                 word.clear();
             }
-            else {
-                word.push_back(str[i]);
-            }
+            else word.push_back(i);
         }
-        
-        return words;
+        if (!word.empty()) res.push_back(word);
+        return res;
     }
-    
+
 public:
-    bool wordPattern(string pattern, string str) {
-        unordered_map<char, int> charToIndex;
-        unordered_map<string, int> wordToIndex;
-        vector<string> words = split(str);
-        
-        if (words.size() != pattern.size()) {
+    bool wordPattern(string pattern, string s) {
+        const int n = pattern.size();
+        vector<string> words = toWords(s);
+        unordered_map<char, string> m;
+        unordered_map<string, char> rev;
+
+        if (words.size() != n) {
             return false;
         }
-        
-        const int n = words.size();
-        char c;
-        string w;
-        
         for (int i = 0; i < n; i++) {
-            c = pattern[i];
-            w = words[i];
-            
-            if (charToIndex.count(c) == 0) {
-                charToIndex[c] = i;
+            char key = pattern[i];
+            string value = words[i];
+            if (!m.count(key)) {
+                if (rev.count(value)) {
+                    return false;
+                }
+                m[key] = value;
+                rev[value] = key;
             }
-            
-            if (wordToIndex.count(w) == 0) {
-                wordToIndex[w] = i;
-            }
-            
-            if (charToIndex[c] != wordToIndex[w]) {
+            else if (m[key] != value) {
                 return false;
             }
         }
