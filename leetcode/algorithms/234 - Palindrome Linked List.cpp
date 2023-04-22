@@ -8,53 +8,43 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {    
-public:
-    bool isPalindrome(ListNode* head) {
-        ListNode* slow = head;
-        ListNode* fast = head;
-        
-        while (fast) {
-            slow = slow->next;
-            fast = fast->next;
-            
-            if (fast) {
-                fast = fast->next;
-            }
-        }
-        
-        bool res = true;
-        
-        ListNode* reversedHalf = reverse(slow);
-        
-        slow = head;
-        fast = reversedHalf;
-        
-        while (reversedHalf) {
-            if (reversedHalf->val != head->val) {
-                res = false;
-                break;
-            }
+class Solution {
+
+    int getSize(ListNode* head) {
+        int res = 0;
+        while (head) {
+            res++;
             head = head->next;
-            reversedHalf = reversedHalf->next;
         }
-        
-        reverse(fast);
-        
         return res;
     }
-    
+
     ListNode* reverse(ListNode* head) {
-        ListNode* prev = NULL;
-        ListNode* next = NULL;
-        
+        ListNode* res = NULL;
         while (head) {
-            next = head->next;
-            head->next = prev;
-            prev = head;
+            ListNode* next = head->next;
+            head->next = res;
+            res = head;
             head = next;
         }
-        
-        return prev;
+        return res;
+    }
+
+public:
+    bool isPalindrome(ListNode* head) {
+        int size = getSize(head);
+        ListNode* tail = head;
+        for (int i = 0; i < (size + 1) / 2; i++) {
+            tail = tail->next;
+        }
+        tail = reverse(tail);
+        while (tail) {
+            if (head->val != tail->val) {
+                return false;
+            }
+            head = head->next;
+            tail = tail->next;
+        }
+        return true;
     }
 };
