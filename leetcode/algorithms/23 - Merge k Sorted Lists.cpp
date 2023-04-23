@@ -9,38 +9,27 @@
  * };
  */
 class Solution {
-    
-    priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> preprocess(vector<ListNode*>& lists) {
-        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> res;
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* res = new ListNode();
+        ListNode* cur = res;
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> q;
         
         for (auto& i: lists) {
             if (i) {
-                res.push({i->val, i});
+                q.push({i->val, i});
             }
         }
         
-        return res;
-    }
-    
-public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* res = new ListNode(0);
-        ListNode* head = res;
-        ListNode* next;
-        
-        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, greater<pair<int, ListNode*>>> mins = preprocess(lists);
-        pair<int, ListNode*> cur;
-        
-        while (!mins.empty()) {
-            cur = mins.top();
-            mins.pop();
-            
-            head->next = cur.second;
-            next = cur.second->next;
-            if (next) {
-                mins.push({next->val, next});
+        while (!q.empty()) {
+            auto top = q.top();
+            q.pop();
+
+            cur->next = top.second;
+            cur = cur->next;
+            if (top.second->next) {
+                q.push({top.second->next->val, top.second->next});
             }
-            head = head->next;
         }
         
         return res->next;
