@@ -25,13 +25,10 @@ class WordDictionary {
                 if (search(it->second, word, index + 1)) {
                     return true;
                 }
-            }
-            
+            }   
             return false;
         }
-        else {
-            return search(root->next[word[index]], word, index + 1);
-        }
+        return search(root->next[word[index]], word, index + 1);
     }
     
 public:
